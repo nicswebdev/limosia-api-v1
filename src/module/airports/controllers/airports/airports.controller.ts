@@ -7,6 +7,7 @@ import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { AirportsService } from '../../services/airports/airports.service';
 import { QueryNotFoundFilter } from '@/common/filters';
 
+@ApiTags('airports')
 @Controller('airports')
 export class AirportsController {
   constructor(private readonly airportService: AirportsService) {}
