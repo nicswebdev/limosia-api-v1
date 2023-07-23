@@ -1,7 +1,14 @@
 import { ApiPaginatedResponse, ApiSingleResponse } from '@/common/decorators';
 import { PaginationQuery, PaginatedDto } from '@/common/dto';
 import { Airports } from '@/db/models';
-import { Controller, Get, Param, Query, UseFilters } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Query,
+  UseFilters,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { AirportsService } from '../../services/airports/airports.service';
@@ -36,10 +43,20 @@ export class AirportsController {
   @UseFilters(QueryNotFoundFilter)
   @ApiSingleResponse({
     model: Airports,
-    summary: 'Find single item of existing Airports.',
     apiOkDescription: 'Successfully received model list',
+    summary: 'Find single item of existing Airports.',
   })
   findOne(@Param('id') id: string) {
     return this.airportService.findOne(+id);
+  }
+
+  @Delete(':id')
+  @ApiSingleResponse({
+    model: Airports,
+    apiOkDescription: 'The records has been successfully returned.',
+    summary: 'Removed single item of existing Airports.',
+  })
+  remove(@Param('id') id: string) {
+    return this.airportService.remove(+id);
   }
 }

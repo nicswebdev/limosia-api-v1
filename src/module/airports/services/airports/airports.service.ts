@@ -39,4 +39,8 @@ export class AirportsService {
   findOne(id: number): Promise<Airports> {
     return this.airportRepository.findOneByOrFail({ id });
   }
+
+  remove(id: number) {
+    return this.airportRepository.delete(id);
+  }
 }
