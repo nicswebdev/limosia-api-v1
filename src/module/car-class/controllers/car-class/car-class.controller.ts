@@ -4,13 +4,10 @@ import {
   Delete,
   Get,
   Param,
-  ParseFilePipeBuilder,
   Patch,
   Post,
   Query,
-  UploadedFile,
   UseFilters,
-  UseInterceptors,
 } from '@nestjs/common';
 import { CarClassService } from '../../services/car-class/car-class.service';
 import {
@@ -21,11 +18,9 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CarClass } from '@/db/models';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
 import {
   ApiPaginatedResponse,
+  ApiSingleResponse,
   ImageFileUploadInterceptor,
   UploadedFileValidator,
 } from '@/common/decorators';
@@ -42,9 +37,7 @@ export class CarClassController {
   @Get()
   @ApiPaginatedResponse({
     model: CarClass,
-    description: 'The records has been successfully returned.',
-  })
-  @ApiOperation({
+    apiOkDescription: 'The records has been successfully returned.',
     summary: 'Find all of existing Car Class.',
   })
   findAll(
@@ -63,6 +56,11 @@ export class CarClassController {
 
   @Get(':id')
   @UseFilters(QueryNotFoundFilter)
+  @ApiSingleResponse({
+    model: CarClass,
+    apiOkDescription: 'Successfully received model list',
+    summary: 'Find single item of existing Car Class.',
+  })
   findOne(@Param('id') id: string) {
     return this.carClassService.findOne(+id);
   }
@@ -90,14 +88,12 @@ export class CarClassController {
 
   @Patch(':id')
   @ImageFileUploadInterceptor({ destination: './public/uploads/car_class' })
-  @ApiOperation({
+  @ApiSingleResponse({
+    model: CarClass,
+    apiOkDescription: 'The record has been successfully updated.',
     summary: 'Update existing Car Class by ID.',
   })
   @ApiConsumes('multipart/form-data', 'application/json')
-  @ApiCreatedResponse({
-    description: 'The record has been successfully updated.',
-    type: CarClass,
-  })
   @ApiForbiddenResponse({ description: 'Forbidden.' })
   update(
     @Param('id') id: string,
@@ -111,6 +107,11 @@ export class CarClassController {
   }
 
   @Delete(':id')
+  @ApiSingleResponse({
+    model: CarClass,
+    apiOkDescription: 'The records has been successfully returned.',
+    summary: 'Removed single item of existing Car Class.',
+  })
   remove(@Param('id') id: string) {
     return this.carClassService.remove(+id);
   }
