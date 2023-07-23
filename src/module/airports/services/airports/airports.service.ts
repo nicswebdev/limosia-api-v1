@@ -4,6 +4,7 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 import { Repository, Like } from 'typeorm';
+import { CreateAirportDto, UpdateAirportDto } from '../../dto';
 
 @Injectable()
 export class AirportsService {
@@ -40,6 +41,10 @@ export class AirportsService {
     const newAirport = this.airportRepository.create(createAirportDto);
 
     return this.airportRepository.save(newAirport);
+  }
+
+  async update(id: number, updateAirportDto: UpdateAirportDto) {
+    return this.airportRepository.save({ id, ...updateAirportDto });
   }
 
   findOne(id: number): Promise<Airports> {

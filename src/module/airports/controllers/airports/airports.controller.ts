@@ -7,6 +7,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Query,
   UseFilters,
@@ -53,6 +54,19 @@ export class AirportsController {
   create(@Body() createAirportDto: CreateAirportDto) {
     return this.airportService.create(createAirportDto);
   }
+
+  @Patch(':id')
+  @ApiOperation({
+    summary: 'Update existing Airport by ID.',
+  })
+  @ApiCreatedResponse({
+    type: Airports,
+    description: 'The record has been successfully updated.',
+  })
+  update(@Param('id') id: string, @Body() updateAirportDto: UpdateAirportDto) {
+    return this.airportService.update(+id, updateAirportDto);
+  }
+
   @Get(':id')
   @UseFilters(QueryNotFoundFilter)
   @ApiSingleResponse({
