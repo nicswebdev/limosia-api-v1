@@ -56,6 +56,11 @@ export class CarClassController {
 
   @Get(':id')
   @UseFilters(QueryNotFoundFilter)
+  @ApiSingleResponse({
+    model: CarClass,
+    apiOkDescription: 'Successfully received model list',
+    summary: 'Find single item of existing Car Class.',
+  })
   findOne(@Param('id') id: string) {
     return this.carClassService.findOne(+id);
   }
