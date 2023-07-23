@@ -36,6 +36,12 @@ export class AirportsService {
     };
   }
 
+  create(createAirportDto: CreateAirportDto) {
+    const newAirport = this.airportRepository.create(createAirportDto);
+
+    return this.airportRepository.save(newAirport);
+  }
+
   findOne(id: number): Promise<Airports> {
     return this.airportRepository.findOneByOrFail({ id });
   }
