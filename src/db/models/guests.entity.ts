@@ -1,11 +1,13 @@
 import { IsBoolean, IsEmail, IsStrongPassword, Length } from 'class-validator';
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Entity()
 export class Guests {
@@ -66,4 +68,10 @@ export class Guests {
   @Column({ default: false })
   @IsBoolean()
   delete_row: boolean;
+
+  @BeforeInsert()
+  async setHashedPassword(password: string) {
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(password || this.password, salt);
+  }
 }
