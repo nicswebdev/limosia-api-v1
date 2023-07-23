@@ -32,4 +32,14 @@ export class AirportsController {
     return this.airportService.findAllPaginate({ ...options });
   }
 
+  @Get(':id')
+  @UseFilters(QueryNotFoundFilter)
+  @ApiSingleResponse({
+    model: Airports,
+    summary: 'Find single item of existing Airports.',
+    apiOkDescription: 'Successfully received model list',
+  })
+  findOne(@Param('id') id: string) {
+    return this.airportService.findOne(+id);
+  }
 }
