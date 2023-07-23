@@ -12,13 +12,15 @@ async function bootstrap() {
     defaultVersion: '1',
   });
 
-  const config = new DocumentBuilder()
-    .setTitle('Limosia Backend')
-    .setDescription('Limosia API Backend Architecture')
-    .setVersion('1.0')
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('documentation', app, document);
+  if (process.env.NODE_ENV !== 'PRODUCTION') {
+    const config = new DocumentBuilder()
+      .setTitle('Limosia Backend')
+      .setDescription('Limosia API Backend Architecture')
+      .setVersion('1.0')
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('documentation', app, document);
+  }
 
   await app.listen(process.env.PORT);
 }
