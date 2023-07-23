@@ -4,8 +4,12 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from './db';
+import { UsersModule } from './module/users/users.module';
+import { CarClassModule } from './module/car-class/car-class.module';
+import { AirportsModule } from './module/airports/airports.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -20,6 +24,10 @@ import { APP_GUARD } from '@nestjs/core';
       }),
       inject: [ConfigService],
     }),
+    MulterModule.register({ dest: './public/uploads' }),
+    UsersModule,
+    CarClassModule,
+    AirportsModule,
   ],
   controllers: [AppController],
   providers: [
