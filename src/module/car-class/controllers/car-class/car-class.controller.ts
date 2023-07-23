@@ -20,6 +20,7 @@ import {
 import { CarClass } from '@/db/models';
 import {
   ApiPaginatedResponse,
+  ApiSingleResponse,
   ImageFileUploadInterceptor,
   UploadedFileValidator,
 } from '@/common/decorators';
@@ -36,9 +37,7 @@ export class CarClassController {
   @Get()
   @ApiPaginatedResponse({
     model: CarClass,
-    description: 'The records has been successfully returned.',
-  })
-  @ApiOperation({
+    apiOkDescription: 'The records has been successfully returned.',
     summary: 'Find all of existing Car Class.',
   })
   findAll(
@@ -84,14 +83,12 @@ export class CarClassController {
 
   @Patch(':id')
   @ImageFileUploadInterceptor({ destination: './public/uploads/car_class' })
-  @ApiOperation({
+  @ApiSingleResponse({
+    model: CarClass,
+    apiOkDescription: 'The record has been successfully updated.',
     summary: 'Update existing Car Class by ID.',
   })
   @ApiConsumes('multipart/form-data', 'application/json')
-  @ApiCreatedResponse({
-    description: 'The record has been successfully updated.',
-    type: CarClass,
-  })
   @ApiForbiddenResponse({ description: 'Forbidden.' })
   update(
     @Param('id') id: string,
@@ -105,6 +102,11 @@ export class CarClassController {
   }
 
   @Delete(':id')
+  @ApiSingleResponse({
+    model: CarClass,
+    apiOkDescription: 'The records has been successfully returned.',
+    summary: 'Removed single item of existing Car Class.',
+  })
   remove(@Param('id') id: string) {
     return this.carClassService.remove(+id);
   }
