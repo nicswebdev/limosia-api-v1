@@ -4,13 +4,10 @@ import {
   Delete,
   Get,
   Param,
-  ParseFilePipeBuilder,
   Patch,
   Post,
   Query,
-  UploadedFile,
   UseFilters,
-  UseInterceptors,
 } from '@nestjs/common';
 import { CarClassService } from '../../services/car-class/car-class.service';
 import {
@@ -21,9 +18,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CarClass } from '@/db/models';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
 import {
   ApiPaginatedResponse,
   ImageFileUploadInterceptor,
