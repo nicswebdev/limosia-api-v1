@@ -10,6 +10,7 @@ import { AirportsModule } from './module/airports/airports.module';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { MulterModule } from '@nestjs/platform-express';
+import { CurrenciesModule } from './module/currencies/currencies.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { MulterModule } from '@nestjs/platform-express';
     UsersModule,
     CarClassModule,
     AirportsModule,
+    CurrenciesModule,
   ],
   controllers: [AppController],
   providers: [

@@ -1,15 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean } from 'class-validator';
+import { IsBoolean, IsInt } from 'class-validator';
 import {
-  Column,
-  CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
-export class Airports {
+@Entity('currencies')
+export class Currency {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
@@ -19,12 +19,9 @@ export class Airports {
   name: string;
 
   @ApiProperty()
-  @Column()
-  latitude: string;
-
-  @ApiProperty()
-  @Column()
-  longitude: string;
+  @Column({ default: 0 })
+  @IsInt()
+  rate: number;
 
   @ApiProperty()
   @CreateDateColumn()
@@ -34,7 +31,7 @@ export class Airports {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ApiProperty({ default: false })
+  @ApiProperty()
   @Column({ default: false })
   @IsBoolean()
   delete_row: boolean;

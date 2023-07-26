@@ -1,13 +1,20 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsInt, IsOptional, IsString } from 'class-validator';
 import { IPaginationMeta } from 'nestjs-typeorm-paginate';
 import { FindOptionsOrderValue } from 'typeorm';
 
 export class PaginatedDto<TData> {
+  @ApiProperty()
   statusCode: number;
+
+  @ApiProperty()
   message: string;
+
+  @ApiProperty()
   items: TData[];
+
+  @ApiProperty()
   meta: IPaginationMeta;
 }
 

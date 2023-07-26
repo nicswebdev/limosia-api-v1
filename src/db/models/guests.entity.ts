@@ -1,26 +1,23 @@
-import { IsBoolean, IsEmail, IsStrongPassword, Length } from 'class-validator';
+import { IsBoolean } from 'class-validator';
 import {
-  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import { Users } from './users.entity';
 
 @Entity()
 export class Guests {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  @Length(2, 30)
-  f_name: string;
-
-  @Column()
-  @Length(2, 30)
-  l_name: string;
+  @OneToOne(() => Users, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'user_id' })
+  user: Users;
 
   @Column({
     type: 'date',
@@ -43,22 +40,6 @@ export class Guests {
   @Column()
   phone: string;
 
-  @Column({
-    unique: true,
-  })
-  @IsEmail()
-  @Length(5, 50)
-  email: string;
-
-  @Column()
-  @IsStrongPassword({
-    minLength: 8,
-    minNumbers: 1,
-    minLowercase: 1,
-    minUppercase: 1,
-  })
-  password: string;
-
   @CreateDateColumn()
   created_at: Date;
 
@@ -68,10 +49,4 @@ export class Guests {
   @Column({ default: false })
   @IsBoolean()
   delete_row: boolean;
-
-  @BeforeInsert()
-  async setHashedPassword(password: string) {
-    const salt = await bcrypt.genSalt();
-    this.password = await bcrypt.hash(password || this.password, salt);
-  }
 }

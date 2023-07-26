@@ -16,6 +16,8 @@ async function bootstrap() {
     }),
   );
 
+  app.enableCors();
+
   app.setGlobalPrefix('api');
   app.enableVersioning({
     type: VersioningType.URI,
