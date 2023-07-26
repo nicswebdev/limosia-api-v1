@@ -1,5 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateCurrencyDto {
   @ApiPropertyOptional()
@@ -7,8 +8,9 @@ export class CreateCurrencyDto {
   @IsString()
   name: string;
 
-  @ApiPropertyOptional()
-  @IsNotEmpty()
-  @IsString()
-  rate: string;
+  @ApiPropertyOptional({ type: 'integer' })
+  @Transform(({ value }) => parseInt(value))
+  @IsNotEmpty({})
+  @IsInt()
+  rate: number;
 }
