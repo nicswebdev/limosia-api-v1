@@ -1,0 +1,29 @@
+name: CD - Limosia Backend
+
+on:
+  push:
+    branches: [ "development" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Auto Deploy using SSH
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        port: 22
+        script: |
+          cd ~/apps/limosia-backend
+          git fetch --all
+          git checkout development
+          git pull
+          git status
+          yarn install --frozen-lockfile
+          yarn build
+          pm2 restart LimosiaBackend
+          
