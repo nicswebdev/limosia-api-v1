@@ -29,7 +29,7 @@ import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { CreateCarClassDto, UpdateCarClassDto } from '../../dto';
 import { QueryNotFoundFilter } from '@/common/filters';
 
-@ApiTags('car-class')
+@ApiTags('Car Class')
 @Controller('car-class')
 export class CarClassController {
   constructor(private readonly carClassService: CarClassService) {}
@@ -82,6 +82,8 @@ export class CarClassController {
     image: Express.Multer.File,
   ) {
     const data = { ...createCarClassDto, image };
+
+    console.log({ data });
 
     return this.carClassService.create(data);
   }

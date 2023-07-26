@@ -18,7 +18,7 @@ import { AirportsService } from '../../services/airports/airports.service';
 import { QueryNotFoundFilter } from '@/common/filters';
 import { CreateAirportDto, UpdateAirportDto } from '../../dto';
 
-@ApiTags('airports')
+@ApiTags('Airports')
 @Controller('airports')
 export class AirportsController {
   constructor(private readonly airportService: AirportsService) {}
