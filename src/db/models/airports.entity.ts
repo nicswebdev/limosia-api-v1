@@ -4,9 +4,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { PriceSchema } from './price-schema.entity';
 
 @Entity()
 export class Airports {
@@ -38,4 +40,7 @@ export class Airports {
   @Column({ default: false })
   @IsBoolean()
   delete_row: boolean;
+
+  @OneToOne(() => PriceSchema, (priceSchema) => priceSchema.airport)
+  price_schema: PriceSchema;
 }

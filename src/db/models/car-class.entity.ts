@@ -3,9 +3,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { PriceSchema } from './price-schema.entity';
 
 @Entity()
 export class CarClass {
@@ -44,4 +46,7 @@ export class CarClass {
   @ApiProperty({ default: false })
   @Column({ default: false })
   delete_row: boolean;
+
+  @OneToOne(() => PriceSchema, (priceSchema) => priceSchema.car_class)
+  price_schema: PriceSchema;
 }
