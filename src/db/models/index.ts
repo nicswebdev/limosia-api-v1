@@ -5,4 +5,5 @@ export * from './guests.entity';
 export * from './orders.entity';
 export * from './price-schema.entity';
 export * from './role.entity';
+export * from './user-roles.entity';
 export * from './users.entity';
