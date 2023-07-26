@@ -10,7 +10,7 @@ export class CreateCurrencyDto {
 
   @ApiPropertyOptional({ type: 'integer' })
   @Transform(({ value }) => parseInt(value))
-  @IsNotEmpty({})
+  @IsNotEmpty()
   @IsInt()
   rate: number;
 }
