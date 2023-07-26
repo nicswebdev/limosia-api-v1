@@ -16,6 +16,6 @@ jobs:
       with:
         node-version: 18
         cache: 'yarn'
-    - run: yarn install --frozen-lockfile --production
+    - run: yarn instasll --frozen-lockfile
     - run: yarn build
     - run: yarn test
