@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsBoolean } from 'class-validator';
 import {
   Column,
   CreateDateColumn,
@@ -35,5 +36,6 @@ export class Airports {
 
   @ApiProperty({ default: false })
   @Column({ default: false })
+  @IsBoolean()
   delete_row: boolean;
 }
