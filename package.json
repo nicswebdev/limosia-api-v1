@@ -22,7 +22,9 @@
     "migration:generate": "yarn typeorm migration:generate",
     "migration:create": "yarn typeorm migration:create",
     "migration:run": "yarn typeorm migration:run",
-    "migration:revert": "yarn typeorm migration:revert"
+    "migration:revert": "yarn typeorm migration:revert",
+    "seed:create": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:create -d src/db/data-source.ts",
+    "seed:run": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:run -d src/db/data-source.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
