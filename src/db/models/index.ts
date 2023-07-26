@@ -1,6 +1,6 @@
 export * from './airports.entity';
 export * from './car-class.entity';
-export * from './currencies.entity';
+export * from './currency.entity';
 export * from './guests.entity';
 export * from './orders.entity';
 export * from './price-schema.entity';
