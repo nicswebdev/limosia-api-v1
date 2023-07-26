@@ -11,6 +11,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { MulterModule } from '@nestjs/platform-express';
 import { CurrenciesModule } from './module/currencies/currencies.module';
+import { PriceSchemaModule } from './module/price-schema/price-schema.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { CurrenciesModule } from './module/currencies/currencies.module';
     CarClassModule,
     AirportsModule,
     CurrenciesModule,
+    PriceSchemaModule,
   ],
   controllers: [AppController],
   providers: [
