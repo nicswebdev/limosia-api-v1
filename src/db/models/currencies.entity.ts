@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsBoolean } from 'class-validator';
 import {
   Entity,
@@ -9,21 +10,27 @@ import {
 
 @Entity()
 export class Currencies {
+  @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
 
+  @ApiProperty()
   @Column()
   name: string;
 
+  @ApiProperty()
   @Column()
   rate: string;
 
+  @ApiProperty()
   @CreateDateColumn()
   created_at: Date;
 
+  @ApiProperty()
   @UpdateDateColumn()
   updated_at: Date;
 
+  @ApiProperty()
   @Column({ default: false })
   @IsBoolean()
   delete_row: boolean;
