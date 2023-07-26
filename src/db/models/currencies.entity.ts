@@ -8,8 +8,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
-export class Currencies {
+@Entity('currencies')
+export class Currency {
   @ApiProperty()
   @PrimaryGeneratedColumn()
   id: number;
