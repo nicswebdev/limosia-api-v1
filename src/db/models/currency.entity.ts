@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean } from 'class-validator';
+import { IsBoolean, IsInt } from 'class-validator';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -19,8 +19,9 @@ export class Currency {
   name: string;
 
   @ApiProperty()
-  @Column()
-  rate: string;
+  @Column({ default: 0 })
+  @IsInt()
+  rate: number;
 
   @ApiProperty()
   @CreateDateColumn()
