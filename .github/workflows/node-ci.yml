@@ -1,21 +1,39 @@
-name: NestJS CI - Limosia Backend
+name: CI
 
 on:
   pull_request:
-    branches: [ "main", "development" ]
+    branches: ['main', 'development']
 
 jobs:
-  build:
-
+  test:
+    name: Unit Tests
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js 18
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
-        cache: 'yarn'
-    - run: yarn install --frozen-lockfile
-    - run: yarn build
-    - run: yarn test
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/ci-setup
+
+      - name: Run Test
+        run: yarn test
+
+  test_dist:
+    name: Test Dist
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/ci-setup
+
+      - name: Production Dist Test
+        run: yarn build
+
+  linting:
+    name: Linting
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/ci-setup
+
+      - name: ESLint
+        run: yarn lint
