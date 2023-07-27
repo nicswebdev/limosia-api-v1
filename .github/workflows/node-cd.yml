@@ -9,19 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Make sure node is installed first
-      - name: Installing Node
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: '.node-version'
-
-      # Then we're installing yarn and pm2
-      - name: Installing yarn
-        run: npm install -g yarn
-
-      - name: Installing PM2
-        run: npm install -g pm2
-
       - name: Auto Deploy using SSH
         uses: appleboy/ssh-action@v1.0.0
         with:
@@ -30,16 +17,18 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
           script: |
+            whoami
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+
             cd ~/apps/limosia-backend
             git fetch --all
             git checkout development
             git pull
             git status
-            yarn install --frozen-lockfile
-            yarn build
-            pm2 restart LimosiaBackend
 
-      # Uninstall when we're done
-      - name: Clean up
-        if: always()
-        run: npm uninstall -g yarn pm2
+            yarn install --frozen-lockfile
+            yarn migration:run
+            yarn build
+
+            pm2 restart LimosiaBackend
