@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/setup-nodejs
+      - uses: ./.github/actions/ci-setup
 
       - name: Run Test
         run: yarn test
@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/setup-nodejs
+      - uses: ./.github/actions/ci-setup
 
       - name: Production Dist Test
         run: yarn build
@@ -33,7 +33,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/setup-nodejs
+      - uses: ./.github/actions/ci-setup
 
       - name: ESLint
         run: yarn lint
