@@ -5,30 +5,31 @@ on:
     branches: ['development']
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  deploy:
+    - name: Deploy to Server
+      runs-on: ubuntu-latest
 
-    steps:
-      - name: Auto Deploy using SSH
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.PRIVATE_KEY }}
-          port: 22
-          script: |
-            whoami
-            export NVM_DIR=~/.nvm
-            source ~/.nvm/nvm.sh
+      steps:
+        - name: Deploy using SSH
+          uses: appleboy/ssh-action@v1.0.0
+          with:
+            host: ${{ secrets.HOST }}
+            username: ${{ secrets.USERNAME }}
+            key: ${{ secrets.PRIVATE_KEY }}
+            port: 22
+            script: |
+              whoami
+              export NVM_DIR=~/.nvm
+              source ~/.nvm/nvm.sh
 
-            cd ~/apps/limosia-backend
-            git fetch --all
-            git checkout development
-            git pull
-            git status
+              cd ~/apps/limosia-backend
+              git fetch --all
+              git checkout development
+              git pull
+              git status
 
-            yarn install --frozen-lockfile
-            yarn migration:run
-            yarn build
+              yarn install --frozen-lockfile
+              yarn migration:run
+              yarn build
 
-            pm2 restart LimosiaBackend
+              pm2 restart LimosiaBackend
