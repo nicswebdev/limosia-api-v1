@@ -17,8 +17,9 @@ jobs:
           cache: 'yarn'
 
       - name: Run Test
-        run: yarn install --frozen-lockfile
-        run: yarn test
+        run: |
+          yarn install --frozen-lockfile
+          yarn test
 
   test_dist:
     name: Test Dist
