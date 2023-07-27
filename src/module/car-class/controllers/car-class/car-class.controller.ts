@@ -38,7 +38,7 @@ export class CarClassController {
   @ApiPaginatedResponse({
     model: CarClass,
     apiOkDescription: 'The records has been successfully returned.',
-    summary: 'Find all of existing Car Class.',
+    summary: 'Find all of existing Car Classes.',
   })
   findAll(
     @Query() paginationQuery: PaginationQuery,
@@ -59,7 +59,7 @@ export class CarClassController {
   @ApiSingleResponse({
     model: CarClass,
     apiOkDescription: 'Successfully received model list',
-    summary: 'Find single item of existing Car Class.',
+    summary: 'Find single item of existing Car Classes.',
   })
   findOne(@Param('id') id: string) {
     return this.carClassService.findOne(+id);
@@ -112,7 +112,7 @@ export class CarClassController {
   @ApiSingleResponse({
     model: CarClass,
     apiOkDescription: 'The records has been successfully returned.',
-    summary: 'Removed single item of existing Car Class.',
+    summary: 'Removed single item of existing Car Classes.',
   })
   remove(@Param('id') id: string) {
     return this.carClassService.remove(+id);
