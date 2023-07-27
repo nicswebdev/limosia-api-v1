@@ -1,7 +1,7 @@
 name: CD - Limosia Backend
 
 on:
-  pull_request:
+  push:
     branches: ['development']
 
 jobs:
@@ -14,7 +14,6 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          # password: ${{ secrets.PASSWORD }}
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
           script: |
