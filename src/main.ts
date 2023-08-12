@@ -23,7 +23,10 @@ async function bootstrap() {
     type: VersioningType.URI,
     defaultVersion: '1',
   });
-  app.useStaticAssets(join(__dirname, '..', 'public'));
+  app.useStaticAssets(join(__dirname, '..', 'public'), {
+    index: false,
+    prefix: '/public',
+  });
 
   if (process.env.NODE_ENV !== 'PRODUCTION') {
     const config = new DocumentBuilder()
