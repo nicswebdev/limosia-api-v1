@@ -1,9 +1,15 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe, VersioningType } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  ValidationPipe,
+  VersioningType,
+} from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import * as session from 'express-session';
+import * as passport from 'passport';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -15,6 +21,7 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   app.enableCors();
 
@@ -49,6 +56,21 @@ async function bootstrap() {
     SwaggerModule.setup('documentation', app, document);
   }
 
-  await app.listen(process.env.PORT);
+  // use wrapper
+  app.use(passport.initialize());
+  app.use(
+    session({
+      secret: process.env.JWT_SECRET,
+      saveUninitialized: false,
+      resave: false,
+      cookie: {
+        maxAge: 60000,
+      },
+    }),
+  );
+
+  await app.listen(process.env.PORT, 'localhost', async () => {
+    console.log(`Application is running on: ${await app.getUrl()}`);
+  });
 }
 bootstrap();
