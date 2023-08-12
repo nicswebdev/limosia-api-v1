@@ -23,7 +23,15 @@ async function bootstrap() {
   );
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
-  app.enableCors();
+  app.enableCors({
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:4000',
+      'https://limosia-admin-prod.umahcreative.dev',
+      'https://limosia-admin-dev.umahcreative.dev',
+    ],
+    credentials: true,
+  });
 
   app.setGlobalPrefix('api');
   app.enableVersioning({
