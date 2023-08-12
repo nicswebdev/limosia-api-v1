@@ -12,6 +12,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { MulterModule } from '@nestjs/platform-express';
 import { CurrenciesModule } from './module/currencies/currencies.module';
 import { PriceSchemaModule } from './module/price-schema/price-schema.module';
+import { MailModule } from './module/mail/mail.module';
 
 @Module({
   imports: [
