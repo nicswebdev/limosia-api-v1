@@ -33,6 +33,17 @@ async function bootstrap() {
       .setTitle('Limosia Backend')
       .setDescription('Limosia API Backend Architecture')
       .setVersion('1.0')
+      .addBearerAuth(
+        {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          name: 'JWT',
+          description: 'Enter Access Token',
+          in: 'header',
+        },
+        'jwt-auth',
+      )
       .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('documentation', app, document);
