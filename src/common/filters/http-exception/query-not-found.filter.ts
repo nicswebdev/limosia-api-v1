@@ -14,12 +14,21 @@ export class QueryNotFoundFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
+    const messageDetail = exception.message
+      .split('"')
+      .join(' ')
+      .split('\n')[2]
+      .replace(/ +(?= )/g, '')
+      .trim();
+
     response.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
+      ...exception,
+
       statusCode: HttpStatus.UNPROCESSABLE_ENTITY,
       timestamp: new Date().toISOString(),
       path: request.url,
-
-      ...exception,
+      message: `Data "${messageDetail}", was not found.`,
+      exceptionMessage: exception.message,
     });
   }
 }
