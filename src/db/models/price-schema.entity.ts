@@ -25,7 +25,7 @@ export class PriceSchema {
   })
   @JoinColumn({ name: 'airport_id' })
   @IsInt()
-  airport: number;
+  airport: Airports | number;
 
   @ApiProperty({ type: CarClass })
   @ManyToOne(() => CarClass, (carClass) => carClass.price_schema, {
@@ -34,7 +34,7 @@ export class PriceSchema {
   })
   @JoinColumn({ name: 'car_class_id' })
   @IsInt()
-  car_class: number;
+  car_class: CarClass | number;
 
   @ApiProperty()
   @Column()
