@@ -1,8 +1,11 @@
 import { DataSource } from 'typeorm';
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
 import { Role } from '../models';
+import { RolesEnum } from '../../common/enums';
 
 export default class CreateRoleSeeder implements Seeder {
+  track = true;
+
   public async run(
     dataSource: DataSource,
     factoryManager: SeederFactoryManager,
@@ -10,10 +13,10 @@ export default class CreateRoleSeeder implements Seeder {
     const roleRepository = dataSource.getRepository(Role);
     const roles = [
       {
-        name: 'admin',
+        name: RolesEnum.ADMIN,
       },
       {
-        name: 'user',
+        name: RolesEnum.USER,
       },
     ];
 

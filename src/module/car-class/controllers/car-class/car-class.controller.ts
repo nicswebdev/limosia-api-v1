@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Query,
+  Request,
   UseFilters,
 } from '@nestjs/common';
 import { CarClassService } from '../../services/car-class/car-class.service';
@@ -22,12 +23,14 @@ import {
   ApiPaginatedResponse,
   ApiSingleResponse,
   ImageFileUploadInterceptor,
+  Roles,
   UploadedFileValidator,
 } from '@/common/decorators';
 import { PaginatedDto, PaginationQuery } from '@/common/dto';
 import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { CreateCarClassDto, UpdateCarClassDto } from '../../dto';
 import { QueryNotFoundFilter } from '@/common/filters';
+import { RolesEnum } from '@/common/enums';
 
 @ApiTags('Car Class')
 @Controller('car-class')
@@ -41,6 +44,7 @@ export class CarClassController {
     summary: 'Find all of existing Car Classes.',
   })
   findAll(
+    @Request() req,
     @Query() paginationQuery: PaginationQuery,
   ): Promise<PaginatedDto<CarClass>> {
     const { page, limit, search, sortBy } = paginationQuery;
@@ -51,21 +55,11 @@ export class CarClassController {
       sortBy,
     };
 
-    return this.carClassService.findAllPaginate({ ...options });
-  }
-
-  @Get(':id')
-  @UseFilters(QueryNotFoundFilter)
-  @ApiSingleResponse({
-    model: CarClass,
-    apiOkDescription: 'Successfully received model list',
-    summary: 'Find single item of existing Car Classes.',
-  })
-  findOne(@Param('id') id: string) {
-    return this.carClassService.findOne(+id);
+    return this.carClassService.findAllPaginate(options);
   }
 
   @Post()
+  @Roles(RolesEnum.ADMIN)
   @ImageFileUploadInterceptor({ destination: './public/uploads/car_class' })
   @ApiOperation({
     summary: 'Create a new Car Class.',
@@ -83,12 +77,13 @@ export class CarClassController {
   ) {
     const data = { ...createCarClassDto, image };
 
-    console.log({ data });
+    console.log({ data, image });
 
     return this.carClassService.create(data);
   }
 
   @Patch(':id')
+  @Roles(RolesEnum.ADMIN)
   @ImageFileUploadInterceptor({ destination: './public/uploads/car_class' })
   @ApiSingleResponse({
     model: CarClass,
@@ -108,7 +103,19 @@ export class CarClassController {
     return this.carClassService.update(+id, data);
   }
 
+  @Get(':id')
+  @UseFilters(QueryNotFoundFilter)
+  @ApiSingleResponse({
+    model: CarClass,
+    apiOkDescription: 'Successfully received model list',
+    summary: 'Find single item of existing Car Classes.',
+  })
+  findOne(@Param('id') id: string) {
+    return this.carClassService.findOne(+id);
+  }
+
   @Delete(':id')
+  @Roles(RolesEnum.ADMIN)
   @ApiSingleResponse({
     model: CarClass,
     apiOkDescription: 'The records has been successfully returned.',

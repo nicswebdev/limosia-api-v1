@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from './db';
@@ -12,6 +10,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { MulterModule } from '@nestjs/platform-express';
 import { CurrenciesModule } from './module/currencies/currencies.module';
 import { PriceSchemaModule } from './module/price-schema/price-schema.module';
+import { AuthModule } from './module/auth/auth.module';
+import { MailModule } from './module/mail/mail.module';
 
 @Module({
   imports: [
@@ -27,15 +27,17 @@ import { PriceSchemaModule } from './module/price-schema/price-schema.module';
       inject: [ConfigService],
     }),
     MulterModule.register({ dest: './public/uploads' }),
+
     UsersModule,
+    AuthModule,
     CarClassModule,
     AirportsModule,
     CurrenciesModule,
     PriceSchemaModule,
+    MailModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [
-    AppService,
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,

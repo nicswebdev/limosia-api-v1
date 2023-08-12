@@ -39,9 +39,10 @@ export class CarClassService {
   }
 
   create(createCarClassDto?: CreateCarClassDto) {
+    const savedPathImage = `${process.env.APP_URL}/${createCarClassDto.image.path}`;
     const data = {
       ...createCarClassDto,
-      image: createCarClassDto.image.path,
+      image: savedPathImage,
     };
 
     const newCarClass = this.carClassRepository.create(data);

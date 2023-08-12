@@ -9,44 +9,61 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Users } from './users.entity';
+import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Guests {
+  @ApiProperty()
   @PrimaryGeneratedColumn()
+  @Exclude()
   id: number;
 
-  @OneToOne(() => Users, { onDelete: 'CASCADE' })
+  @ApiProperty({ type: Users })
+  @OneToOne(() => Users, (users) => users.guest, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
-  user: Users;
+  user: number;
 
+  @ApiProperty()
   @Column({
     type: 'date',
     nullable: true,
   })
   dob: Date | null;
 
-  @Column()
-  address: string;
+  @ApiProperty()
+  @Column({ nullable: true })
+  address: string | null;
 
-  @Column()
-  city: string;
+  @ApiProperty()
+  @Column({ nullable: true })
+  city: string | null;
 
-  @Column()
-  state: string;
+  @ApiProperty()
+  @Column({ nullable: true })
+  state: string | null;
 
-  @Column()
-  zip_code: string;
+  @ApiProperty()
+  @Column({ nullable: true })
+  zip_code: string | null;
 
-  @Column()
-  phone: string;
+  @ApiProperty()
+  @Column({ nullable: true })
+  phone: string | null;
 
+  @ApiProperty()
   @CreateDateColumn()
+  @Exclude()
   created_at: Date;
 
+  @ApiProperty()
   @UpdateDateColumn()
+  @Exclude()
   updated_at: Date;
 
+  @ApiProperty()
   @Column({ default: false })
   @IsBoolean()
+  @Exclude()
   delete_row: boolean;
 }

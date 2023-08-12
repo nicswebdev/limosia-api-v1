@@ -1,4 +1,8 @@
-import { ApiPaginatedResponse, ApiSingleResponse } from '@/common/decorators';
+import {
+  ApiPaginatedResponse,
+  ApiSingleResponse,
+  Roles,
+} from '@/common/decorators';
 import { PaginationQuery, PaginatedDto } from '@/common/dto';
 import { Airports } from '@/db/models';
 import {
@@ -17,6 +21,7 @@ import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { AirportsService } from '../../services/airports/airports.service';
 import { QueryNotFoundFilter } from '@/common/filters';
 import { CreateAirportDto, UpdateAirportDto } from '../../dto';
+import { RolesEnum } from '@/common/enums';
 
 @ApiTags('Airports')
 @Controller('airports')
@@ -40,10 +45,11 @@ export class AirportsController {
       sortBy,
     };
 
-    return this.airportService.findAllPaginate({ ...options });
+    return this.airportService.findAllPaginate(options);
   }
 
   @Post()
+  @Roles(RolesEnum.ADMIN)
   @ApiOperation({
     summary: 'Create a new Airport.',
   })
@@ -56,6 +62,7 @@ export class AirportsController {
   }
 
   @Patch(':id')
+  @Roles(RolesEnum.ADMIN)
   @ApiOperation({
     summary: 'Update existing Airport by ID.',
   })
@@ -79,6 +86,7 @@ export class AirportsController {
   }
 
   @Delete(':id')
+  @Roles(RolesEnum.ADMIN)
   @ApiSingleResponse({
     model: Airports,
     apiOkDescription: 'The records has been successfully returned.',
