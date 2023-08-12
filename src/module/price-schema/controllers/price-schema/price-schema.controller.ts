@@ -1,4 +1,8 @@
-import { ApiPaginatedResponse, ApiSingleResponse } from '@/common/decorators';
+import {
+  ApiPaginatedResponse,
+  ApiSingleResponse,
+  Roles,
+} from '@/common/decorators';
 import { PaginationQuery, PaginatedDto } from '@/common/dto';
 import { QueryNotFoundFilter } from '@/common/filters';
 import { PriceSchema } from '@/db/models';
@@ -17,6 +21,7 @@ import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { CreatePriceSchemaDto, UpdatePriceSchemaDto } from '../../dto';
 import { PriceSchemaService } from '../../services/price-schema/price-schema.service';
+import { RolesEnum } from '@/common/enums';
 
 @ApiTags('Price Schema')
 @Controller('price-schema')
@@ -40,10 +45,11 @@ export class PriceSchemaController {
       sortBy,
     };
 
-    return this.priceSchemaService.findAllPaginate({ ...options });
+    return this.priceSchemaService.findAllPaginate(options);
   }
 
   @Post()
+  @Roles(RolesEnum.ADMIN)
   @ApiOperation({
     summary: 'Create a new Price Schema.',
   })
@@ -56,6 +62,7 @@ export class PriceSchemaController {
   }
 
   @Patch(':id')
+  @Roles(RolesEnum.ADMIN)
   @ApiOperation({
     summary: 'Update existing Price Schema by ID.',
   })
@@ -82,6 +89,7 @@ export class PriceSchemaController {
   }
 
   @Delete(':id')
+  @Roles(RolesEnum.ADMIN)
   @ApiSingleResponse({
     model: PriceSchema,
     apiOkDescription: 'The records has been successfully returned.',

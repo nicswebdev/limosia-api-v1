@@ -12,11 +12,16 @@ import {
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrenciesService } from '../../services/currencies/currencies.service';
 import { Currency } from '@/db/models';
-import { ApiPaginatedResponse, ApiSingleResponse } from '@/common/decorators';
+import {
+  ApiPaginatedResponse,
+  ApiSingleResponse,
+  Roles,
+} from '@/common/decorators';
 import { PaginationQuery, PaginatedDto } from '@/common/dto';
 import { QueryNotFoundFilter } from '@/common/filters';
 import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { CreateCurrencyDto, UpdateCurrencyDto } from '../../dto';
+import { RolesEnum } from '@/common/enums';
 
 @ApiTags('Currencies')
 @Controller('currencies')
@@ -40,10 +45,11 @@ export class CurrenciesController {
       sortBy,
     };
 
-    return this.currenciesService.findAllPaginate({ ...options });
+    return this.currenciesService.findAllPaginate(options);
   }
 
   @Post()
+  @Roles(RolesEnum.ADMIN)
   @ApiOperation({
     summary: 'Create a new Currency.',
   })
@@ -56,6 +62,7 @@ export class CurrenciesController {
   }
 
   @Patch(':id')
+  @Roles(RolesEnum.ADMIN)
   @ApiOperation({
     summary: 'Update existing Currency by ID.',
   })
@@ -82,6 +89,7 @@ export class CurrenciesController {
   }
 
   @Delete(':id')
+  @Roles(RolesEnum.ADMIN)
   @ApiSingleResponse({
     model: Currency,
     apiOkDescription: 'The records has been successfully returned.',

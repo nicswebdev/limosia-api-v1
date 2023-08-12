@@ -3,9 +3,10 @@ import { CurrenciesController } from './controllers/currencies/currencies.contro
 import { CurrenciesService } from './services/currencies/currencies.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Currency } from '@/db/models';
+import { UsersModule } from '../users/users.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Currency])],
+  imports: [TypeOrmModule.forFeature([Currency]), UsersModule],
   controllers: [CurrenciesController],
   providers: [CurrenciesService],
 })
