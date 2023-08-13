@@ -1,12 +1,14 @@
 import { GoogleUserDetail } from '@/common/types';
 import { Users } from '@/db/models';
 import { UsersService } from '@/module/users/services/users/users.service';
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class GoogleAuthService {
+  private readonly logger = new Logger(GoogleAuthService.name);
+
   constructor(
     @InjectRepository(Users)
     private readonly usersRepository: Repository<Users>,
@@ -15,15 +17,13 @@ export class GoogleAuthService {
   ) {}
 
   async validateUser(user: GoogleUserDetail) {
-    console.log('services ', { user });
     const queryUser = await this.usersRepository.findOneBy({
       email: user.email,
     });
-    console.log('hmm ', { queryUser });
 
     if (queryUser) return queryUser;
 
-    console.log('First time user! Creating new user...');
+    this.logger.warn('First time user! Creating new user...');
     return this.usersService.create(user);
   }
 }
