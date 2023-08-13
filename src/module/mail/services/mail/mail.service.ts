@@ -28,12 +28,12 @@ export class MailService {
         username: 'r4e',
         name: 'Richie',
         support_email: 'support@limosia.com',
-        support_url: 'http://localhost:4000/support',
-        help_url: 'http://localhost:4000/support',
-        action_url: 'http://localhost:4000/action',
+        support_url: `${process.env.FRONTEND_URL}/support`,
+        help_url: `${process.env.FRONTEND_URL}/support`,
+        action_url: `${process.env.FRONTEND_URL}/action`,
         operating_system: '',
         browser_name: '',
-        login_url: 'http://localhost:4000/login',
+        login_url: `${process.env.FRONTEND_URL}/login`,
       },
     });
   }

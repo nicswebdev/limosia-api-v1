@@ -28,8 +28,8 @@ import { MailModule } from './module/mail/mail.module';
     }),
     MulterModule.register({ dest: './public/uploads' }),
 
-    UsersModule,
     AuthModule,
+    UsersModule,
     CarClassModule,
     AirportsModule,
     CurrenciesModule,
