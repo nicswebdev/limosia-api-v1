@@ -55,15 +55,22 @@ export class CarClassService {
   }
 
   async update(id: number, updateAuthDto: UpdateCarClassDto) {
+    const savedPathImage = `${process.env.APP_URL}/${updateAuthDto.image?.path}`;
+
     try {
       const selfData = await this.findOne(id);
       if (selfData) {
-        if (updateAuthDto.image) unlinkSync(`./${selfData.image}`);
+        const imageLocalPath = String(selfData.image).replace(
+          process.env.APP_URL,
+          '.',
+        );
+
+        if (updateAuthDto.image) unlinkSync(`${imageLocalPath}`);
 
         const data = {
           ...selfData,
           ...updateAuthDto,
-          image: updateAuthDto.image?.path ?? undefined,
+          image: updateAuthDto.image?.path ? savedPathImage : undefined,
         };
 
         this.carClassRepository.save({ ...data, id });
@@ -87,11 +94,11 @@ export class CarClassService {
     try {
       const data = await this.findOne(id);
       const imageLocalPath = String(data.image).replace(
-        'http://localhost:3333/',
-        '',
+        process.env.APP_URL,
+        '.',
       );
 
-      if (data) unlinkSync(`./${imageLocalPath}`);
+      if (data.image) unlinkSync(`${imageLocalPath}`);
     } catch (error) {}
 
     return this.carClassRepository.delete(id);
