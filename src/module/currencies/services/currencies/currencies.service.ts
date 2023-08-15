@@ -48,7 +48,7 @@ export class CurrenciesService {
   }
 
   findOne(id: number): Promise<Currency> {
-    return this.currencyRepository.findOneByOrFail({ id });
+    return this.currencyRepository.findOneOrFail({ where: { id } });
   }
 
   remove(id: number) {

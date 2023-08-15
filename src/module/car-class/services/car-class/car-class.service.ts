@@ -51,7 +51,7 @@ export class CarClassService {
   }
 
   findOne(id: number): Promise<CarClass> {
-    return this.carClassRepository.findOneByOrFail({ id });
+    return this.carClassRepository.findOneOrFail({ where: { id } });
   }
 
   async update(id: number, updateAuthDto: UpdateCarClassDto) {
@@ -71,7 +71,11 @@ export class CarClassService {
         return {
           statusCode: HttpStatus.OK,
           message: 'Successfully updated!',
-          data: await this.carClassRepository.findOneByOrFail({ id }),
+          data: await this.carClassRepository.findOneOrFail({
+            where: {
+              id,
+            },
+          }),
         };
       }
     } catch (error) {
@@ -82,7 +86,12 @@ export class CarClassService {
   async remove(id: number) {
     try {
       const data = await this.findOne(id);
-      if (data) unlinkSync(`./${data.image}`);
+      const imageLocalPath = String(data.image).replace(
+        'http://localhost:3333/',
+        '',
+      );
+
+      if (data) unlinkSync(`./${imageLocalPath}`);
     } catch (error) {}
 
     return this.carClassRepository.delete(id);
