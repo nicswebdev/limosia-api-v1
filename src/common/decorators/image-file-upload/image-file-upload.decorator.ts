@@ -1,6 +1,6 @@
 import { UseInterceptors, applyDecorators } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
+import { MulterError, diskStorage } from 'multer';
 import { extname } from 'path';
 
 interface Options {
@@ -11,6 +11,13 @@ export const ImageFileUploadInterceptor = (options: Options) => {
   return applyDecorators(
     UseInterceptors(
       FileInterceptor('image', {
+        fileFilter: (req, file, cb) => {
+          if (file.originalname.match(/^.*\.(jpg|jpeg|png)$/)) {
+            cb(null, true);
+          } else {
+            cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
+          }
+        },
         storage: diskStorage({
           destination: options.destination ?? './public/uploads',
           filename: (req, file, cb) => {
@@ -22,6 +29,9 @@ export const ImageFileUploadInterceptor = (options: Options) => {
             cb(null, filename);
           },
         }),
+        limits: {
+          fileSize: 2048 * 1000, // 2mb
+        },
       }),
     ),
   );
