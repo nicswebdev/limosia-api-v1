@@ -77,8 +77,6 @@ export class CarClassController {
   ) {
     const data = { ...createCarClassDto, image };
 
-    console.log({ data, image });
-
     return this.carClassService.create(data);
   }
 

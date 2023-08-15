@@ -10,8 +10,6 @@ export class MailService {
   ) {}
 
   sendMail(opts: ISendMailOptions) {
-    console.log(`hmmm -> ${Date().toString()}`);
-
     return this.mailerService.sendMail({
       from: `${this.configService.get(
         'MAIL_FROM_NAME',

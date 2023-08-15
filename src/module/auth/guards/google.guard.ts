@@ -9,19 +9,14 @@ export class GoogleAuthGuard extends AuthGuard('google') {
     super({
       // accessType: 'offline',
     });
-    console.log('aku disini !!');
   }
 
   async canActivate(context: ExecutionContext) {
     const isActivate = (await super.canActivate(context)) as boolean;
-    console.log('mang ea? ', isActivate);
 
     const req = context.switchToHttp().getRequest() as Request;
 
-    console.log('sblm await ');
     await super.logIn(req);
-
-    console.log('stelah await ', isActivate);
 
     return isActivate;
   }

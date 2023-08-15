@@ -1,4 +1,4 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './controllers/auth/auth.controller';
 import { AuthService } from './services/auth/auth.service';
@@ -20,8 +20,6 @@ import { SessionSerializer } from '@/common/utils';
       signOptions: { expiresIn: '1d' },
     }),
     PassportModule.register({ session: true }),
-
-    // forwardRef(() => UsersModule),
     UsersModule,
   ],
   controllers: [AuthController, GoogleAuthController],

@@ -48,7 +48,7 @@ export class AirportsService {
   }
 
   findOne(id: number): Promise<Airports> {
-    return this.airportRepository.findOneByOrFail({ id });
+    return this.airportRepository.findOneOrFail({ where: { id } });
   }
 
   remove(id: number) {
