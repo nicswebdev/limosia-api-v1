@@ -58,40 +58,44 @@ export class UsersService {
       );
     }
 
-    return new Promise(async (resolve) => {
-      await this.dataSource.transaction(async (manager) => {
-        const { guest, ...userRest } = createUsersDto;
+    return new Promise(async (resolve, reject) => {
+      try {
+        await this.dataSource.transaction(async (manager) => {
+          const { guest, ...userRest } = createUsersDto;
 
-        const newUser = this.usersRepository.create(userRest);
-        const savedUser = await manager.save(newUser);
+          const newUser = this.usersRepository.create(userRest);
+          const savedUser = await manager.save(newUser);
 
-        const newGuest = this.guestRepository.create({
-          ...guest,
+          const newGuest = this.guestRepository.create({
+            ...guest,
 
-          user: savedUser.id,
+            user: savedUser.id,
+          });
+          await manager.save(newGuest);
+
+          const newUserRole = this.userRoleRepository.create({
+            user: savedUser.id,
+            role: 2,
+          });
+          await manager.save(newUserRole);
+
+          const user = await manager.findOne(Users, {
+            where: {
+              email: savedUser.email,
+            },
+            relations: ['user_role.role', 'guest'],
+          });
+
+          resolve({
+            statusCode: HttpStatus.CREATED,
+            message: 'User successfully created!',
+
+            user,
+          });
         });
-        await manager.save(newGuest);
-
-        const newUserRole = this.userRoleRepository.create({
-          user: savedUser.id,
-          role: 2,
-        });
-        await manager.save(newUserRole);
-
-        const user = await manager.findOne(Users, {
-          where: {
-            email: savedUser.email,
-          },
-          relations: ['user_role.role', 'guest'],
-        });
-
-        resolve({
-          statusCode: HttpStatus.CREATED,
-          message: 'User successfully created!',
-
-          user,
-        });
-      });
+      } catch (error) {
+        reject(error);
+      }
     });
   }
 
