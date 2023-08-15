@@ -12,6 +12,7 @@ import { CurrenciesModule } from './module/currencies/currencies.module';
 import { PriceSchemaModule } from './module/price-schema/price-schema.module';
 import { AuthModule } from './module/auth/auth.module';
 import { MailModule } from './module/mail/mail.module';
+import { OrdersModule } from './module/orders/orders.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { MailModule } from './module/mail/mail.module';
     CurrenciesModule,
     PriceSchemaModule,
     MailModule,
+    OrdersModule,
   ],
   controllers: [],
   providers: [
