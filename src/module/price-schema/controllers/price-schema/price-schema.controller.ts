@@ -4,7 +4,7 @@ import {
   Roles,
 } from '@/common/decorators';
 import { PaginationQuery, PaginatedDto } from '@/common/dto';
-import { QueryNotFoundFilter } from '@/common/filters';
+import { QueryFailedFilter, QueryNotFoundFilter } from '@/common/filters';
 import { PriceSchema } from '@/db/models';
 import {
   Body,
@@ -29,6 +29,7 @@ export class PriceSchemaController {
   constructor(private readonly priceSchemaService: PriceSchemaService) {}
 
   @Get()
+  @UseFilters(QueryFailedFilter)
   @ApiPaginatedResponse({
     model: PriceSchema,
     apiOkDescription: 'The records has been successfully returned.',
@@ -50,6 +51,7 @@ export class PriceSchemaController {
 
   @Post()
   @Roles(RolesEnum.ADMIN)
+  @UseFilters(QueryFailedFilter)
   @ApiOperation({
     summary: 'Create a new Price Schema.',
   })
@@ -63,6 +65,7 @@ export class PriceSchemaController {
 
   @Patch(':id')
   @Roles(RolesEnum.ADMIN)
+  @UseFilters(QueryFailedFilter)
   @ApiOperation({
     summary: 'Update existing Price Schema by ID.',
   })
@@ -78,7 +81,7 @@ export class PriceSchemaController {
   }
 
   @Get(':id')
-  @UseFilters(QueryNotFoundFilter)
+  @UseFilters(QueryNotFoundFilter, QueryFailedFilter)
   @ApiSingleResponse({
     model: PriceSchema,
     apiOkDescription: 'Successfully received model list',
@@ -90,6 +93,7 @@ export class PriceSchemaController {
 
   @Delete(':id')
   @Roles(RolesEnum.ADMIN)
+  @UseFilters(QueryFailedFilter)
   @ApiSingleResponse({
     model: PriceSchema,
     apiOkDescription: 'The records has been successfully returned.',

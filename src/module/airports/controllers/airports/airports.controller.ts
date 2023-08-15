@@ -19,7 +19,7 @@ import {
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { AirportsService } from '../../services/airports/airports.service';
-import { QueryNotFoundFilter } from '@/common/filters';
+import { QueryFailedFilter, QueryNotFoundFilter } from '@/common/filters';
 import { CreateAirportDto, UpdateAirportDto } from '../../dto';
 import { RolesEnum } from '@/common/enums';
 
@@ -29,6 +29,7 @@ export class AirportsController {
   constructor(private readonly airportService: AirportsService) {}
 
   @Get()
+  @UseFilters(QueryFailedFilter)
   @ApiPaginatedResponse({
     model: Airports,
     apiOkDescription: 'The records has been successfully returned.',
@@ -50,6 +51,7 @@ export class AirportsController {
 
   @Post()
   @Roles(RolesEnum.ADMIN)
+  @UseFilters(QueryFailedFilter)
   @ApiOperation({
     summary: 'Create a new Airport.',
   })
@@ -63,6 +65,7 @@ export class AirportsController {
 
   @Patch(':id')
   @Roles(RolesEnum.ADMIN)
+  @UseFilters(QueryFailedFilter)
   @ApiOperation({
     summary: 'Update existing Airport by ID.',
   })
@@ -75,7 +78,7 @@ export class AirportsController {
   }
 
   @Get(':id')
-  @UseFilters(QueryNotFoundFilter)
+  @UseFilters(QueryNotFoundFilter, QueryFailedFilter)
   @ApiSingleResponse({
     model: Airports,
     apiOkDescription: 'Successfully received model list',
@@ -87,6 +90,7 @@ export class AirportsController {
 
   @Delete(':id')
   @Roles(RolesEnum.ADMIN)
+  @UseFilters(QueryFailedFilter)
   @ApiSingleResponse({
     model: Airports,
     apiOkDescription: 'The records has been successfully returned.',

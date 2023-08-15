@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UsersService } from '../../services/users/users.service';
-import { QueryNotFoundFilter } from '@/common/filters';
+import { QueryFailedFilter, QueryNotFoundFilter } from '@/common/filters';
 import { JwtAuthGuard } from '@/module/auth/guards';
 import { Users } from '@/db/models';
 import {
@@ -27,6 +27,7 @@ export class UsersController {
 
   @Get()
   @Roles(RolesEnum.ADMIN)
+  @UseFilters(QueryFailedFilter)
   @ApiPaginatedResponse({
     model: Users,
     apiOkDescription: 'The records has been successfully returned.',
@@ -48,7 +49,7 @@ export class UsersController {
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
-  @UseFilters(QueryNotFoundFilter)
+  @UseFilters(QueryNotFoundFilter, QueryFailedFilter)
   @ApiSingleResponse({
     model: Users,
     apiOkDescription: 'Successfully received model list',

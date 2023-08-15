@@ -18,7 +18,7 @@ import {
   Roles,
 } from '@/common/decorators';
 import { PaginationQuery, PaginatedDto } from '@/common/dto';
-import { QueryNotFoundFilter } from '@/common/filters';
+import { QueryFailedFilter, QueryNotFoundFilter } from '@/common/filters';
 import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { CreateCurrencyDto, UpdateCurrencyDto } from '../../dto';
 import { RolesEnum } from '@/common/enums';
@@ -29,6 +29,7 @@ export class CurrenciesController {
   constructor(private readonly currenciesService: CurrenciesService) {}
 
   @Get()
+  @UseFilters(QueryFailedFilter)
   @ApiPaginatedResponse({
     model: Currency,
     apiOkDescription: 'The records has been successfully returned.',
@@ -50,6 +51,7 @@ export class CurrenciesController {
 
   @Post()
   @Roles(RolesEnum.ADMIN)
+  @UseFilters(QueryFailedFilter)
   @ApiOperation({
     summary: 'Create a new Currency.',
   })
@@ -63,6 +65,7 @@ export class CurrenciesController {
 
   @Patch(':id')
   @Roles(RolesEnum.ADMIN)
+  @UseFilters(QueryFailedFilter)
   @ApiOperation({
     summary: 'Update existing Currency by ID.',
   })
@@ -78,7 +81,7 @@ export class CurrenciesController {
   }
 
   @Get(':id')
-  @UseFilters(QueryNotFoundFilter)
+  @UseFilters(QueryNotFoundFilter, QueryFailedFilter)
   @ApiSingleResponse({
     model: Currency,
     apiOkDescription: 'Successfully received model list',
@@ -90,6 +93,7 @@ export class CurrenciesController {
 
   @Delete(':id')
   @Roles(RolesEnum.ADMIN)
+  @UseFilters(QueryFailedFilter)
   @ApiSingleResponse({
     model: Currency,
     apiOkDescription: 'The records has been successfully returned.',
