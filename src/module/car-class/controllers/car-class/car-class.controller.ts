@@ -29,7 +29,7 @@ import {
 import { PaginatedDto, PaginationQuery } from '@/common/dto';
 import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { CreateCarClassDto, UpdateCarClassDto } from '../../dto';
-import { QueryNotFoundFilter } from '@/common/filters';
+import { QueryFailedFilter, QueryNotFoundFilter } from '@/common/filters';
 import { RolesEnum } from '@/common/enums';
 
 @ApiTags('Car Class')
@@ -38,6 +38,7 @@ export class CarClassController {
   constructor(private readonly carClassService: CarClassService) {}
 
   @Get()
+  @UseFilters(QueryFailedFilter)
   @ApiPaginatedResponse({
     model: CarClass,
     apiOkDescription: 'The records has been successfully returned.',
@@ -60,6 +61,7 @@ export class CarClassController {
 
   @Post()
   @Roles(RolesEnum.ADMIN)
+  @UseFilters(QueryFailedFilter)
   @ImageFileUploadInterceptor({ destination: './public/uploads/car_class' })
   @ApiOperation({
     summary: 'Create a new Car Class.',
@@ -82,6 +84,7 @@ export class CarClassController {
 
   @Patch(':id')
   @Roles(RolesEnum.ADMIN)
+  @UseFilters(QueryFailedFilter)
   @ImageFileUploadInterceptor({ destination: './public/uploads/car_class' })
   @ApiSingleResponse({
     model: CarClass,
@@ -102,7 +105,7 @@ export class CarClassController {
   }
 
   @Get(':id')
-  @UseFilters(QueryNotFoundFilter)
+  @UseFilters(QueryNotFoundFilter, QueryFailedFilter)
   @ApiSingleResponse({
     model: CarClass,
     apiOkDescription: 'Successfully received model list',
@@ -114,6 +117,7 @@ export class CarClassController {
 
   @Delete(':id')
   @Roles(RolesEnum.ADMIN)
+  @UseFilters(QueryFailedFilter)
   @ApiSingleResponse({
     model: CarClass,
     apiOkDescription: 'The records has been successfully returned.',

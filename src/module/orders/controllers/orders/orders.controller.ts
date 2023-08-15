@@ -21,7 +21,7 @@ import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { OrdersService } from '../../services/orders/orders.service';
 import { RolesEnum } from '@/common/enums';
 import { CreateOrderDto, UpdateOrderDto } from '../../dto';
-import { QueryNotFoundFilter } from '@/common/filters';
+import { QueryFailedFilter, QueryNotFoundFilter } from '@/common/filters';
 
 @ApiTags('Orders')
 @Controller('orders')
@@ -30,6 +30,7 @@ export class OrdersController {
 
   @Get()
   @Roles(RolesEnum.ADMIN)
+  @UseFilters(QueryFailedFilter)
   @ApiPaginatedResponse({
     model: Order,
     apiOkDescription: 'The records has been successfully returned.',
@@ -51,6 +52,7 @@ export class OrdersController {
 
   @Post()
   @Roles(RolesEnum.USER, RolesEnum.ADMIN)
+  @UseFilters(QueryFailedFilter)
   @ApiOperation({
     summary: 'Create a new Order.',
   })
@@ -64,6 +66,7 @@ export class OrdersController {
 
   @Patch(':id')
   @Roles(RolesEnum.ADMIN)
+  @UseFilters(QueryFailedFilter)
   @ApiOperation({
     summary: 'Update existing Order by ID.',
   })
@@ -77,7 +80,7 @@ export class OrdersController {
 
   @Get('/me')
   @Roles(RolesEnum.USER, RolesEnum.ADMIN)
-  @UseFilters(QueryNotFoundFilter)
+  @UseFilters(QueryNotFoundFilter, QueryFailedFilter)
   @ApiSingleResponse({
     model: Order,
     apiOkDescription: 'Successfully received model list',

@@ -17,7 +17,7 @@ import {
 import { LocalAuthGuard } from '../../guards';
 import { LoginDto } from '../../dto';
 import { AuthService } from '../../services/auth/auth.service';
-import { QueryNotFoundFilter } from '@/common/filters';
+import { QueryFailedFilter, QueryNotFoundFilter } from '@/common/filters';
 import { Users } from '@/db/models';
 import { CreateUserDto } from '@/module/users/dto';
 import { UsersService } from '@/module/users/services/users/users.service';
@@ -32,7 +32,7 @@ export class AuthController {
 
   @Post('login')
   @UseGuards(LocalAuthGuard)
-  @UseFilters(QueryNotFoundFilter)
+  @UseFilters(QueryNotFoundFilter, QueryFailedFilter)
   @ApiOperation({
     summary: 'Log in auth',
   })
@@ -52,6 +52,7 @@ export class AuthController {
   }
 
   @Post('register')
+  @UseFilters(QueryFailedFilter)
   @ApiOperation({
     summary: 'Register a new User.',
   })
