@@ -13,6 +13,7 @@ import { Guests } from './guests.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
 import { ExternalAuth } from './external-auth.entity';
+import { Order } from './orders.entity';
 
 @Entity()
 export class Users {
@@ -62,6 +63,9 @@ export class Users {
   @ApiProperty()
   @OneToOne(() => ExternalAuth, (external_auth) => external_auth.user)
   external_auth: ExternalAuth | number;
+
+  @OneToOne(() => Order, (order) => order.user)
+  order: Order | number;
 
   @BeforeInsert()
   async setHashedPassword(password: string) {
