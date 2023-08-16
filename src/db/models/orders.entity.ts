@@ -10,6 +10,9 @@ import {
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Users } from './users.entity';
+import { PaymentStatus } from './payment-status.entity';
+import { OrderStatus } from './order-status.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity('orders')
 export class Order {
@@ -19,6 +22,11 @@ export class Order {
 
   @Column()
   user_id: number;
+
+  @ApiProperty({ type: () => Users })
+  @ManyToOne(() => Users, (user) => user.order, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'user_id' })
+  user: Users;
 
   @ApiProperty()
   @Column({
@@ -121,13 +129,23 @@ export class Order {
   @Column()
   order_currency: string;
 
-  @ApiProperty()
-  @Column()
-  payment_status: string;
+  @Column({ nullable: true })
+  @Exclude()
+  payment_status_id: number;
 
-  @ApiProperty()
-  @Column()
-  order_status: string;
+  @ApiProperty({ type: () => PaymentStatus })
+  @ManyToOne(() => PaymentStatus, (payment) => payment.order)
+  @JoinColumn({ name: 'payment_status_id' })
+  payment_status: PaymentStatus;
+
+  @Column({ nullable: true })
+  @Exclude()
+  order_status_id: number;
+
+  @ApiProperty({ type: () => OrderStatus })
+  @ManyToOne(() => OrderStatus, (order) => order.order)
+  @JoinColumn({ name: 'order_status_id' })
+  order_status: OrderStatus;
 
   @ApiProperty()
   @CreateDateColumn()
@@ -141,9 +159,4 @@ export class Order {
   @Column({ default: false })
   @IsBoolean()
   delete_row: boolean;
-
-  @ApiProperty({ type: () => Users })
-  @ManyToOne(() => Users, (user) => user.order, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'user_id' })
-  user: number;
 }

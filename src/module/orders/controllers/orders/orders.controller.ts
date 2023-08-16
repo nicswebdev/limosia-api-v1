@@ -22,11 +22,35 @@ import { OrdersService } from '../../services/orders/orders.service';
 import { RolesEnum } from '@/common/enums';
 import { CreateOrderDto, UpdateOrderDto } from '../../dto';
 import { QueryFailedFilter, QueryNotFoundFilter } from '@/common/filters';
+import { AuthUserExpress } from '@/common/types';
 
 @ApiTags('Orders')
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly orderService: OrdersService) {}
+
+  @Get('me')
+  @Roles(RolesEnum.USER, RolesEnum.ADMIN)
+  @UseFilters(QueryNotFoundFilter, QueryFailedFilter)
+  @ApiSingleResponse({
+    model: Order,
+    apiOkDescription: 'Successfully received model list',
+    summary: "Find all current logged in user's existing Orders.",
+  })
+  findMyOrders(
+    @AuthUser() user: AuthUserExpress,
+    @Query() paginationQuery: PaginationQuery,
+  ): Promise<PaginatedDto<Order>> {
+    const { page, limit, search, sortBy } = paginationQuery;
+    const options: IPaginationOptions & PaginationQuery = {
+      page,
+      limit,
+      search,
+      sortBy,
+    };
+
+    return this.orderService.findMyOrders(user, options);
+  }
 
   @Get()
   @Roles(RolesEnum.ADMIN)
@@ -60,8 +84,11 @@ export class OrdersController {
     type: Order,
     description: 'The record has been successfully created.',
   })
-  create(@Body() createOrderDto: CreateOrderDto) {
-    return this.orderService.create(createOrderDto);
+  create(
+    @AuthUser() user: AuthUserExpress,
+    @Body() createOrderDto: CreateOrderDto,
+  ) {
+    return this.orderService.create(user, createOrderDto);
   }
 
   @Patch(':id')
@@ -78,26 +105,15 @@ export class OrdersController {
     return this.orderService.update(+id, updateOrderDto);
   }
 
-  @Get('/me')
-  @Roles(RolesEnum.USER, RolesEnum.ADMIN)
+  @Get(':id')
+  @Roles(RolesEnum.ADMIN)
   @UseFilters(QueryNotFoundFilter, QueryFailedFilter)
   @ApiSingleResponse({
     model: Order,
     apiOkDescription: 'Successfully received model list',
-    summary: 'Find single item of existing Orders.',
+    summary: 'Find single item of existing Order.',
   })
-  findOne(
-    @AuthUser() user,
-    @Query() paginationQuery: PaginationQuery,
-  ): Promise<PaginatedDto<Order>> {
-    const { page, limit, search, sortBy } = paginationQuery;
-    const options: IPaginationOptions & PaginationQuery = {
-      page,
-      limit,
-      search,
-      sortBy,
-    };
-
-    return this.orderService.findOne(user, options);
+  findOne(@Param('id') id: string) {
+    return this.orderService.findOne(+id);
   }
 }

@@ -37,8 +37,8 @@ export default class CreateOrdersSeeder implements Seeder {
         total_price: 100,
         price_schema_name: 'Platinum',
         order_currency: 'USD',
-        payment_status: 'PENDING',
-        order_status: 'WAITING',
+        payment_status: null,
+        order_status: null,
       },
     ];
 
