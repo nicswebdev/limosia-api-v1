@@ -29,6 +29,7 @@ async function bootstrap() {
       'http://localhost:4000',
       'https://limosia-admin-prod.umahcreative.dev',
       'https://limosia-admin-dev.umahcreative.dev',
+      process.env.FRONTEND_URL,
     ],
     credentials: true,
   });
