@@ -3,21 +3,13 @@ import { Transform } from 'class-transformer';
 
 import {
   IsDateString,
-  IsEmail,
   IsInt,
   IsMilitaryTime,
   IsNotEmpty,
   IsString,
-  Length,
 } from 'class-validator';
 
 export class CreateOrderDto {
-  @ApiPropertyOptional({ type: 'integer' })
-  @Transform(({ value }) => parseInt(value))
-  @IsNotEmpty()
-  @IsInt()
-  user_id: number;
-
   @ApiPropertyOptional()
   @IsNotEmpty()
   @IsString()
@@ -32,13 +24,6 @@ export class CreateOrderDto {
   @IsNotEmpty()
   @IsString()
   l_name: string;
-
-  @ApiPropertyOptional()
-  @IsNotEmpty()
-  @IsEmail()
-  @Length(5, 50)
-  @IsString()
-  email: string;
 
   @ApiPropertyOptional()
   @IsNotEmpty()
@@ -139,13 +124,15 @@ export class CreateOrderDto {
   @IsString()
   order_currency: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ type: 'integer' })
+  @Transform(({ value }) => parseInt(value))
   @IsNotEmpty()
-  @IsString()
-  payment_status: string;
+  @IsInt()
+  payment_status_id: number;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ type: 'integer' })
+  @Transform(({ value }) => parseInt(value))
   @IsNotEmpty()
-  @IsString()
-  order_status: string;
+  @IsInt()
+  order_status_id: number;
 }
