@@ -22,6 +22,7 @@ import { OrdersService } from '../../services/orders/orders.service';
 import { RolesEnum } from '@/common/enums';
 import { CreateOrderDto, UpdateOrderDto } from '../../dto';
 import { QueryFailedFilter, QueryNotFoundFilter } from '@/common/filters';
+import { AuthUserExpress } from '@/common/types';
 
 @ApiTags('Orders')
 @Controller('orders')
@@ -60,8 +61,11 @@ export class OrdersController {
     type: Order,
     description: 'The record has been successfully created.',
   })
-  create(@Body() createOrderDto: CreateOrderDto) {
-    return this.orderService.create(createOrderDto);
+  create(
+    @AuthUser() user: AuthUserExpress,
+    @Body() createOrderDto: CreateOrderDto,
+  ) {
+    return this.orderService.create(user, createOrderDto);
   }
 
   @Patch(':id')

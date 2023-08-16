@@ -13,7 +13,8 @@ export class OrdersService {
     private readonly orderRepository: Repository<Order>,
   ) {}
 
-  async findAllPaginate(
+  async findMyOrders(
+    user: AuthUserExpress,
     options: IPaginationOptions & PaginationQuery,
   ): Promise<PaginatedDto<Order>> {
     const val = await paginate<Order>(

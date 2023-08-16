@@ -6,3 +6,9 @@ export type GoogleUserDetail = {
   l_name: string;
   password: string;
 };
+
+export type AuthUserExpress = {
+  id?: number;
+  email?: string;
+  role?: string;
+};
