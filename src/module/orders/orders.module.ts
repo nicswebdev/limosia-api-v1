@@ -5,7 +5,9 @@ import { Order, OrderStatus, PaymentStatus } from '@/db/models';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from '../users/users.module';
 import { OrderStatusesController } from './controllers/order-statuses/order-statuses.controller';
+import { PaymentStatusesController } from './controllers/payment-statuses/payment-statuses.controller';
 import { OrderStatusesService } from './services/order-statuses/order-statuses.service';
+import { PaymentStatusesService } from './services/payment-statuses/payment-statuses.service';
 
 @Module({
   imports: [
@@ -15,7 +17,8 @@ import { OrderStatusesService } from './services/order-statuses/order-statuses.s
   controllers: [
     OrdersController,
     OrderStatusesController,
+    PaymentStatusesController,
   ],
-  providers: [OrdersService, OrderStatusesService],
+  providers: [OrdersService, OrderStatusesService, PaymentStatusesService],
 })
 export class OrdersModule {}
