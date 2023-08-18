@@ -42,8 +42,8 @@ export class PriceSchemaService {
     const newPriceSchema = this.priceSchemaRepository.create({
       ...createPriceSchemaDto,
 
-      airport: createPriceSchemaDto.airport_id,
-      car_class: createPriceSchemaDto.car_class_id,
+      airport_id: createPriceSchemaDto.airport_id,
+      car_class_id: createPriceSchemaDto.car_class_id,
     });
 
     return this.priceSchemaRepository.save(newPriceSchema);
@@ -54,8 +54,8 @@ export class PriceSchemaService {
     await this.priceSchemaRepository.update(id, {
       ...rest,
 
-      airport: airport_id,
-      car_class: car_class_id,
+      airport_id: airport_id,
+      car_class_id: car_class_id,
     });
 
     return await this.findOne(id);
