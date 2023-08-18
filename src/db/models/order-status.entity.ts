@@ -16,6 +16,7 @@ import { IsBoolean } from 'class-validator';
 export class OrderStatus {
   @ApiProperty()
   @PrimaryGeneratedColumn()
+  @Expose()
   id: number;
 
   @ApiProperty()
@@ -41,7 +42,6 @@ export class OrderStatus {
   @IsBoolean()
   delete_row: boolean;
 
-  @ApiProperty()
   @OneToOne(() => Order, (order) => order.order_status)
   order: Order | number;
 }

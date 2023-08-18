@@ -16,6 +16,7 @@ import { Exclude, Expose } from 'class-transformer';
 export class PaymentStatus {
   @ApiProperty()
   @PrimaryGeneratedColumn()
+  @Expose()
   id: number;
 
   @ApiProperty()
