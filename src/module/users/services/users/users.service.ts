@@ -1,5 +1,5 @@
 import { PaginationQuery, PaginatedDto } from '@/common/dto';
-import { Guests, UserRole, Users } from '@/db/models';
+import { Guests, Role, UserRole, Users } from '@/db/models';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
@@ -13,6 +13,8 @@ export class UsersService {
     private readonly usersRepository: Repository<Users>,
     @InjectRepository(Guests)
     private readonly guestRepository: Repository<Guests>,
+    @InjectRepository(Role)
+    private readonly roleRepository: Repository<Role>,
     @InjectRepository(UserRole)
     private readonly userRoleRepository: Repository<UserRole>,
 
@@ -73,9 +75,15 @@ export class UsersService {
           });
           await manager.save(newGuest);
 
+          const userRoleList = await this.roleRepository.findOneOrFail({
+            where: {
+              name: 'user',
+            },
+          });
+
           const newUserRole = this.userRoleRepository.create({
             user: savedUser.id,
-            role: 2,
+            role: userRoleList.id,
           });
           await manager.save(newUserRole);
 
