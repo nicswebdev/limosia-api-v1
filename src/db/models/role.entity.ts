@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { UserRole } from './user-roles.entity';
 import { Exclude } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('roles')
 export class Role {
@@ -15,6 +16,7 @@ export class Role {
   @Exclude()
   id: number;
 
+  @ApiProperty()
   @Column()
   name: string;
 

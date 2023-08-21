@@ -47,6 +47,7 @@ export class UsersController {
     return this.usersService.findAllPaginate(options);
   }
 
+  @ApiTags('Authentication')
   @Get('me')
   @UseGuards(JwtAuthGuard)
   @UseFilters(QueryNotFoundFilter, QueryFailedFilter)

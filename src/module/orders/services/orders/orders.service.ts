@@ -3,7 +3,7 @@ import { Order } from '@/db/models';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
-import { Repository, Like, And } from 'typeorm';
+import { Repository, Like } from 'typeorm';
 import { CreateOrderDto, UpdateOrderDto } from '../../dto';
 import { AuthUserExpress } from '@/common/types';
 

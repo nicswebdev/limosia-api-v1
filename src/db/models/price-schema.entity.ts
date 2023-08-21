@@ -11,6 +11,7 @@ import {
 import { Airports } from './airports.entity';
 import { CarClass } from './car-class.entity';
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class PriceSchema {
@@ -18,23 +19,29 @@ export class PriceSchema {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ApiProperty({ type: Airports })
+  @Column({ nullable: true })
+  @Exclude()
+  airport_id: number;
+
+  @ApiProperty({ type: () => Airports })
   @ManyToOne(() => Airports, (airport) => airport.price_schema, {
     onDelete: 'CASCADE',
     nullable: true,
   })
   @JoinColumn({ name: 'airport_id' })
-  @IsInt()
-  airport: Airports | number;
+  airport: Airports;
 
-  @ApiProperty({ type: CarClass })
+  @Column({ nullable: true })
+  @Exclude()
+  car_class_id: number;
+
+  @ApiProperty({ type: () => CarClass })
   @ManyToOne(() => CarClass, (carClass) => carClass.price_schema, {
     onDelete: 'CASCADE',
     nullable: true,
   })
   @JoinColumn({ name: 'car_class_id' })
-  @IsInt()
-  car_class: CarClass | number;
+  car_class: CarClass;
 
   @ApiProperty()
   @Column()
