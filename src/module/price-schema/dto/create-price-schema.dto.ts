@@ -25,7 +25,13 @@ export class CreatePriceSchemaDto {
   @Transform(({ value }) => parseInt(value))
   @IsNotEmpty()
   @IsInt()
-  range_km: number;
+  from_range_km: number;
+
+  @ApiPropertyOptional({ type: 'integer' })
+  @Transform(({ value }) => parseInt(value))
+  @IsNotEmpty()
+  @IsInt()
+  to_range_km: number;
 
   @ApiPropertyOptional({ type: 'integer' })
   @Transform(({ value }) => parseInt(value))

@@ -50,7 +50,12 @@ export class PriceSchema {
   @ApiProperty()
   @Column({ default: 0 })
   @IsInt()
-  range_km: number;
+  from_range_km: number;
+
+  @ApiProperty()
+  @Column({ default: 0 })
+  @IsInt()
+  to_range_km: number;
 
   @ApiProperty()
   @Column({ default: 0 })
