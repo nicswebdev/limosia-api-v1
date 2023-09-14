@@ -64,4 +64,17 @@ export class AuthController {
   async create(@Body() createUsersDto: CreateUserDto) {
     return await this.usersService.create(createUsersDto);
   }
+
+  @Post('check-email')
+  @UseFilters(QueryFailedFilter)
+  @ApiOperation({
+    summary: 'Check if email exists in database',
+  })
+  @ApiOkResponse({
+    description: 'The record has been successfully created.',
+  })
+  @ApiForbiddenResponse({ description: 'Forbidden.' })
+  async checkEmail(@Request() req) {
+    return await this.usersService.findOneByEmail(req.body.email);
+  }
 }

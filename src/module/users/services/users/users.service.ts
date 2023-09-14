@@ -108,11 +108,12 @@ export class UsersService {
   }
 
   async findOneByEmail(email: string): Promise<Users> {
-    return this.usersRepository.findOneOrFail({
+    const res = await this.usersRepository.findOneOrFail({
       where: {
         email,
       },
       relations: ['user_role.role', 'guest'],
     });
+    return res;
   }
 }

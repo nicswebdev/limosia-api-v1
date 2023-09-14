@@ -13,6 +13,8 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
+
+
   async validateUser(
     email: string,
     password: string,
@@ -54,4 +56,6 @@ export class AuthService {
       user: userData,
     };
   }
+
+
 }

@@ -27,6 +27,7 @@ async function bootstrap() {
     origin: [
       'http://localhost:3000',
       'http://localhost:4000',
+      'http://localhost:3001',
       'https://limosia-admin-prod.umahcreative.dev',
       'https://limosia-admin-dev.umahcreative.dev',
       process.env.FRONTEND_URL,
