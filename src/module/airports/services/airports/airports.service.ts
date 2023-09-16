@@ -1,6 +1,6 @@
 import { PaginationQuery, PaginatedDto } from '@/common/dto';
 import { Airports } from '@/db/models';
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 import { Repository, Like } from 'typeorm';
@@ -37,13 +37,65 @@ export class AirportsService {
     };
   }
 
-  create(createAirportDto: CreateAirportDto) {
+  async create(createAirportDto: CreateAirportDto) {
+    const { name, place_id, name_from_maps } = createAirportDto;
+    const duplicateName = await this.airportRepository.findOneBy({
+      name,
+    });
+    const duplicatePlaceId = await this.airportRepository.findOneBy({
+      place_id,
+    });
+
+    if (duplicateName) {
+      throw new HttpException(
+        'Airport name already exist, please use another name',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (duplicatePlaceId) {
+      throw new HttpException(
+        `${name_from_maps} already exists, please select another airport from maps`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (place_id.trim().length === 0) {
+      throw new HttpException(
+        `Please only select Name From Maps from our google map reccomendation`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const newAirport = this.airportRepository.create(createAirportDto);
 
     return this.airportRepository.save(newAirport);
   }
 
   async update(id: number, updateAirportDto: UpdateAirportDto) {
+    const { name, place_id, name_from_maps } = updateAirportDto;
+
+    const previous = await this.airportRepository.findOneBy({
+      id,
+    });
+
+    const duplicateName = await this.airportRepository.findOneBy({
+      name,
+    });
+    const duplicatePlaceId = await this.airportRepository.findOneBy({
+      place_id,
+    });
+
+    if (duplicateName && !(name === previous.name)) {
+      throw new HttpException(
+        'Airport name already exist, please use another name',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    if (duplicatePlaceId && !(name_from_maps === previous.name_from_maps)) {
+      throw new HttpException(
+        `${name_from_maps} already exists, please select another airport from maps`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     return this.airportRepository.save({ id, ...updateAirportDto });
   }
 

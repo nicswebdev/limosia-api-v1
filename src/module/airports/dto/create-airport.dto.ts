@@ -10,10 +10,9 @@ export class CreateAirportDto {
   @ApiPropertyOptional()
   @IsNotEmpty()
   @IsString()
-  latitude: string;
+  name_from_maps: string;
 
   @ApiPropertyOptional()
-  @IsNotEmpty()
   @IsString()
-  longitude: string;
+  place_id: string;
 }
