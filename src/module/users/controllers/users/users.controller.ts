@@ -60,4 +60,5 @@ export class UsersController {
   findMyProfile(@Request() req) {
     return this.usersService.findOneByEmail(req.user.email);
   }
+  
 }

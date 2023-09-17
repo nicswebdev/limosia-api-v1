@@ -1,5 +1,4 @@
 export type GoogleUserDetail = {
-  provider_user_id: string;
   email: string;
   is_email_verified: boolean;
   f_name: string;
