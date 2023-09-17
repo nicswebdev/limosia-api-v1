@@ -22,11 +22,11 @@ export class Airports {
 
   @ApiProperty()
   @Column()
-  latitude: string;
+  name_from_maps: string;
 
   @ApiProperty()
   @Column()
-  longitude: string;
+  place_id: string;
 
   @ApiProperty()
   @CreateDateColumn()
