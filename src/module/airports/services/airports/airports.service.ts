@@ -103,6 +103,10 @@ export class AirportsService {
     return this.airportRepository.findOneOrFail({ where: { id } });
   }
 
+  findOneByPlaceId(place_id: string): Promise<Airports> {
+    return this.airportRepository.findOneOrFail({ where: { place_id } });
+  }
+
   remove(id: number) {
     return this.airportRepository.delete(id);
   }

@@ -22,6 +22,7 @@ export class PriceSchema {
   @Column({ nullable: true })
   @Exclude()
   airport_id: number;
+  
 
   @ApiProperty({ type: () => Airports })
   @ManyToOne(() => Airports, (airport) => airport.price_schema, {
