@@ -24,7 +24,8 @@ export class PriceSchemaService {
           tier_name: options.search && Like(`%${options.search}%`),
         },
         order: {
-          id: options.sortBy,
+          car_class_id: options.sortBy,
+          base_price:options.sortBy
         },
         relations: ['airport', 'car_class'],
       },
@@ -49,6 +50,7 @@ export class PriceSchemaService {
     return this.priceSchemaRepository.save(newPriceSchema);
   }
 
+  
   async update(id: number, updatePriceSchemaDto: UpdatePriceSchemaDto) {
     const { airport_id, car_class_id, ...rest } = updatePriceSchemaDto;
     await this.priceSchemaRepository.update(id, {
@@ -65,6 +67,16 @@ export class PriceSchemaService {
     return this.priceSchemaRepository.findOneOrFail({
       where: {
         id,
+      },
+      relations: ['airport', 'car_class'],
+    });
+  }
+
+  findOneByCarClassIdAndAirportId(car_class_id: number, airport_id:number): Promise<PriceSchema> {
+    return this.priceSchemaRepository.findOneOrFail({
+      where: {
+        car_class_id,
+        airport_id
       },
       relations: ['airport', 'car_class'],
     });

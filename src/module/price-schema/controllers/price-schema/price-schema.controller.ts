@@ -91,6 +91,17 @@ export class PriceSchemaController {
     return this.priceSchemaService.findOne(+id);
   }
 
+  @Get('/by_car_class_and_airport/:car_class_id/:airport_id')
+  @UseFilters(QueryNotFoundFilter, QueryFailedFilter)
+  @ApiSingleResponse({
+    model: PriceSchema,
+    apiOkDescription: 'Successfully received model list',
+    summary: 'Find single item of existing Price Schemas.',
+  })
+  findOneByCarClassIdAndAirportId(@Param('car_class_id') car_id: string, @Param('airport_id') airport_id:string) {
+    return this.priceSchemaService.findOneByCarClassIdAndAirportId(+car_id, +airport_id);
+  }
+
   @Delete(':id')
   @Roles(RolesEnum.ADMIN)
   @UseFilters(QueryFailedFilter)

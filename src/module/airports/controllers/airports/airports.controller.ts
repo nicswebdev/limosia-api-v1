@@ -88,6 +88,17 @@ export class AirportsController {
     return this.airportService.findOne(+id);
   }
 
+  @Get('/place_id/:place_id')
+  @UseFilters(QueryNotFoundFilter, QueryFailedFilter)
+  @ApiSingleResponse({
+    model: Airports,
+    apiOkDescription: 'Successfully received model list',
+    summary: 'Find single item of existing Airports.',
+  })
+  async findOneByPlaceId(@Param('place_id') place_id: string) {
+    return await this.airportService.findOneByPlaceId(place_id);
+  }
+
   @Delete(':id')
   @Roles(RolesEnum.ADMIN)
   @UseFilters(QueryFailedFilter)
