@@ -106,7 +106,7 @@ export class OrdersController {
   }
 
   @Get(':id')
-  @Roles(RolesEnum.ADMIN)
+  @Roles(RolesEnum.ADMIN, RolesEnum.USER)
   @UseFilters(QueryNotFoundFilter, QueryFailedFilter)
   @ApiSingleResponse({
     model: Order,
