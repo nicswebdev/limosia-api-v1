@@ -4,7 +4,7 @@ import { CreatePriceSchemaDto, UpdatePriceSchemaDto } from '../../dto';
 import { PaginationQuery, PaginatedDto } from '@/common/dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
-import { Repository, Like } from 'typeorm';
+import { Repository, Like, LessThan, MoreThan, MoreThanOrEqual } from 'typeorm';
 
 @Injectable()
 export class PriceSchemaService {
@@ -25,7 +25,7 @@ export class PriceSchemaService {
         },
         order: {
           car_class_id: options.sortBy,
-          base_price:options.sortBy
+          base_price: options.sortBy,
         },
         relations: ['airport', 'car_class'],
       },
@@ -35,6 +35,36 @@ export class PriceSchemaService {
       statusCode: HttpStatus.OK,
       message: 'Success',
 
+      ...val,
+    };
+  }
+
+  async findAllPaginateByAirportIdAndRange(
+    airport_id: number,
+    range: number,
+    options: IPaginationOptions & PaginationQuery,
+  ): Promise<PaginatedDto<PriceSchema>> {
+    const val = await paginate<PriceSchema>(
+      this.priceSchemaRepository,
+      { ...options },
+      {
+        where: {
+          airport_id,
+          from_range_km: LessThan(range),
+          to_range_km: MoreThanOrEqual(range),
+          tier_name: options.search && Like(`%${options.search}%`),
+        },
+        order: {
+          car_class_id: options.sortBy,
+          base_price: options.sortBy,
+        },
+        relations: ['airport', 'car_class'],
+      },
+    );
+    // console.log(val.items[1])
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Success',
       ...val,
     };
   }
@@ -50,12 +80,10 @@ export class PriceSchemaService {
     return this.priceSchemaRepository.save(newPriceSchema);
   }
 
-  
   async update(id: number, updatePriceSchemaDto: UpdatePriceSchemaDto) {
     const { airport_id, car_class_id, ...rest } = updatePriceSchemaDto;
     await this.priceSchemaRepository.update(id, {
       ...rest,
-
       airport_id: airport_id,
       car_class_id: car_class_id,
     });
@@ -72,11 +100,17 @@ export class PriceSchemaService {
     });
   }
 
-  findOneByCarClassIdAndAirportId(car_class_id: number, airport_id:number): Promise<PriceSchema> {
+  findOneByAirportCarClassRange(
+    airport_id: number,
+    car_class_id: number,
+    range: number,
+  ): Promise<PriceSchema> {
     return this.priceSchemaRepository.findOneOrFail({
       where: {
+        airport_id,
         car_class_id,
-        airport_id
+        from_range_km: LessThan(range),
+        to_range_km: MoreThanOrEqual(range),
       },
       relations: ['airport', 'car_class'],
     });

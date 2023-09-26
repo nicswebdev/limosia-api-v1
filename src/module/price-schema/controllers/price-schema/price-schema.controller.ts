@@ -49,6 +49,33 @@ export class PriceSchemaController {
     return this.priceSchemaService.findAllPaginate(options);
   }
 
+  @Get(':airport_id/:range')
+  @UseFilters(QueryFailedFilter)
+  @ApiPaginatedResponse({
+    model: PriceSchema,
+    apiOkDescription: 'The records has been successfully returned.',
+    summary: 'Find schema with airport id and range from google maps.',
+  })
+  findAllByAirportId(
+    @Param('airport_id') airport_id: number,
+    @Param('range') range: number,
+    @Query() paginationQuery: PaginationQuery,
+  ): Promise<PaginatedDto<PriceSchema>> {
+    const { page, limit, search, sortBy } = paginationQuery;
+    const options: IPaginationOptions & PaginationQuery = {
+      page,
+      limit,
+      search,
+      sortBy,
+    };
+
+    return this.priceSchemaService.findAllPaginateByAirportIdAndRange(
+      airport_id,
+      range,
+      options,
+    );
+  }
+
   @Post()
   @Roles(RolesEnum.ADMIN)
   @UseFilters(QueryFailedFilter)
@@ -91,15 +118,23 @@ export class PriceSchemaController {
     return this.priceSchemaService.findOne(+id);
   }
 
-  @Get('/by_car_class_and_airport/:car_class_id/:airport_id')
+  @Get(':airport_id/:car_class_id/:range')
   @UseFilters(QueryNotFoundFilter, QueryFailedFilter)
   @ApiSingleResponse({
     model: PriceSchema,
     apiOkDescription: 'Successfully received model list',
     summary: 'Find single item of existing Price Schemas.',
   })
-  findOneByCarClassIdAndAirportId(@Param('car_class_id') car_id: string, @Param('airport_id') airport_id:string) {
-    return this.priceSchemaService.findOneByCarClassIdAndAirportId(+car_id, +airport_id);
+  findOneByAirportCarClassRange(
+    @Param('airport_id') airport_id: number,
+    @Param('car_class') car_class_id: number,
+    @Param('range') range: number,
+  ) {
+    return this.priceSchemaService.findOneByAirportCarClassRange(
+      +airport_id,
+      +car_class_id,
+      +range,
+    );
   }
 
   @Delete(':id')
