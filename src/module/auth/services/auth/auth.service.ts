@@ -50,6 +50,7 @@ export class AuthService {
   async login(user: Users) {
     const userData = await this.usersService.findOneByEmail(user.email);
     const token = await this.generateToken(user);
+    console.log(user)
 
     return {
       token,
