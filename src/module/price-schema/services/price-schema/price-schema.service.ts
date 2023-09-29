@@ -25,7 +25,6 @@ export class PriceSchemaService {
         },
         order: {
           car_class_id: options.sortBy,
-          base_price: options.sortBy,
         },
         relations: ['airport', 'car_class'],
       },
@@ -34,7 +33,6 @@ export class PriceSchemaService {
     return {
       statusCode: HttpStatus.OK,
       message: 'Success',
-
       ...val,
     };
   }
@@ -56,7 +54,6 @@ export class PriceSchemaService {
         },
         order: {
           car_class_id: options.sortBy,
-          base_price: options.sortBy,
         },
         relations: ['airport', 'car_class'],
       },
@@ -76,6 +73,7 @@ export class PriceSchemaService {
       airport_id: createPriceSchemaDto.airport_id,
       car_class_id: createPriceSchemaDto.car_class_id,
     });
+    // console.log(newPriceSchema)
 
     return this.priceSchemaRepository.save(newPriceSchema);
   }
