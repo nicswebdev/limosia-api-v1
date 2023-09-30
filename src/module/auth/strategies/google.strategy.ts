@@ -32,7 +32,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
         l_name: payload.family_name,
         password: '',
       };
-      console.log(await this.googleAuthService.validateUser(user))
+      // console.log(await this.googleAuthService.validateUser(user))
       return await this.googleAuthService.validateUser(user);
     } catch (error) {
       // Token verification failed, throw an UnauthorizedException.
