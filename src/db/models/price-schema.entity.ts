@@ -1,4 +1,4 @@
-import { IsBoolean, IsInt } from 'class-validator';
+import { IsBoolean, IsInt, IsNumber } from 'class-validator';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -22,7 +22,6 @@ export class PriceSchema {
   @Column({ nullable: true })
   @Exclude()
   airport_id: number;
-  
 
   @ApiProperty({ type: () => Airports })
   @ManyToOne(() => Airports, (airport) => airport.price_schema, {
@@ -60,8 +59,38 @@ export class PriceSchema {
 
   @ApiProperty()
   @Column({ default: 0 })
+  @IsNumber()
+  prebook_time_hour_1: number;
+
+  @ApiProperty()
+  @Column({ default: 0 })
   @IsInt()
-  base_price: number;
+  refundable_base_price_1: number;
+
+  @ApiProperty()
+  @Column({ default: 0 })
+  @IsInt()
+  non_refundable_base_price_1: number;
+
+  @ApiProperty()
+  @Column()
+  @IsNumber()
+  prebook_time_hour_2: number | null;
+
+  @ApiProperty()
+  @Column()
+  @IsInt()
+  refundable_base_price_2: number | null;
+
+  @ApiProperty()
+  @Column()
+  @IsInt()
+  non_refundable_base_price_2: number | null;
+
+  // @ApiProperty()
+  // @Column({ default: 0 })
+  // @IsInt()
+  // base_price: number;
 
   @ApiProperty()
   @CreateDateColumn()

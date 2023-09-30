@@ -31,7 +31,7 @@ export class OrdersService {
         order: {
           id: options.sortBy,
         },
-        relations: ['order_status', 'payment_status'],
+        relations: ['order_status', 'payment_status', 'car_class'],
       },
     );
 
