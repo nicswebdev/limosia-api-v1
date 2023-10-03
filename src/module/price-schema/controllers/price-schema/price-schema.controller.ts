@@ -49,32 +49,20 @@ export class PriceSchemaController {
     return this.priceSchemaService.findAllPaginate(options);
   }
 
-  @Get(':airport_id/:range')
+  @Get(':airport_id/:range/:prebook')
   @UseFilters(QueryFailedFilter)
-  @ApiPaginatedResponse({
-    model: PriceSchema,
-    apiOkDescription: 'The records has been successfully returned.',
-    summary: 'Find schema with airport id and range from google maps.',
-  })
   findAllByAirportId(
     @Param('airport_id') airport_id: number,
     @Param('range') range: number,
-    @Query() paginationQuery: PaginationQuery,
-  ): Promise<PaginatedDto<PriceSchema>> {
-    const { page, limit, search, sortBy } = paginationQuery;
-    const options: IPaginationOptions & PaginationQuery = {
-      page,
-      limit,
-      search,
-      sortBy,
-    };
-
-    return this.priceSchemaService.findAllPaginateByAirportIdAndRange(
+    @Param('prebook') prebook: number,
+  ) {
+    return this.priceSchemaService.findAllByAirportIdAndRange(
       airport_id,
       range,
-      options,
+      prebook
     );
   }
+  
 
   @Post()
   @Roles(RolesEnum.ADMIN)
@@ -118,7 +106,7 @@ export class PriceSchemaController {
     return this.priceSchemaService.findOne(+id);
   }
 
-  @Get(':airport_id/:car_class_id/:range')
+  @Get('/single/:airport_id/:car_class_id/:range/:prebook')
   @UseFilters(QueryNotFoundFilter, QueryFailedFilter)
   @ApiSingleResponse({
     model: PriceSchema,
@@ -127,13 +115,15 @@ export class PriceSchemaController {
   })
   findOneByAirportCarClassRange(
     @Param('airport_id') airport_id: number,
-    @Param('car_class') car_class_id: number,
+    @Param('car_class_id') car_class_id: number,
     @Param('range') range: number,
+    @Param('prebook') prebook:number
   ) {
     return this.priceSchemaService.findOneByAirportCarClassRange(
       +airport_id,
       +car_class_id,
       +range,
+      prebook
     );
   }
 
