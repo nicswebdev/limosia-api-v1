@@ -49,19 +49,45 @@ export class PriceSchemaController {
     return this.priceSchemaService.findAllPaginate(options);
   }
 
-  @Get(':airport_id/:range/:prebook')
+  @Get('/all_relevant_schemas/airport_id=:airport_id/range=:range/prebook=:prebook/guest=:guest_number')
   @UseFilters(QueryFailedFilter)
   findAllByAirportId(
     @Param('airport_id') airport_id: number,
     @Param('range') range: number,
     @Param('prebook') prebook: number,
+    @Param('guest_number') guest_number: number,
   ) {
     return this.priceSchemaService.findAllByAirportIdAndRange(
       airport_id,
       range,
-      prebook
+      prebook,
+      guest_number
     );
   }
+
+  @Get('/single_relevant_schema/airport_id=:airport_id/car_class_id=:car_class_id/range=:range/prebook=:prebook/guest=:guest_number')
+  @UseFilters(QueryNotFoundFilter, QueryFailedFilter)
+  @ApiSingleResponse({
+    model: PriceSchema,
+    apiOkDescription: 'Successfully received model list',
+    summary: 'Find single item of existing Price Schemas.',
+  })
+  findOneByAirportCarClassRange(
+    @Param('airport_id') airport_id: number,
+    @Param('car_class_id') car_class_id: number,
+    @Param('range') range: number,
+    @Param('prebook') prebook:number,
+    @Param('guest_number') guest_number:number
+  ) {
+    return this.priceSchemaService.findOneByAirportCarClassRange(
+      +airport_id,
+      +car_class_id,
+      +range,
+      prebook,
+      guest_number
+    );
+  }
+
   
 
   @Post()
@@ -106,26 +132,6 @@ export class PriceSchemaController {
     return this.priceSchemaService.findOne(+id);
   }
 
-  @Get('/single/:airport_id/:car_class_id/:range/:prebook')
-  @UseFilters(QueryNotFoundFilter, QueryFailedFilter)
-  @ApiSingleResponse({
-    model: PriceSchema,
-    apiOkDescription: 'Successfully received model list',
-    summary: 'Find single item of existing Price Schemas.',
-  })
-  findOneByAirportCarClassRange(
-    @Param('airport_id') airport_id: number,
-    @Param('car_class_id') car_class_id: number,
-    @Param('range') range: number,
-    @Param('prebook') prebook:number
-  ) {
-    return this.priceSchemaService.findOneByAirportCarClassRange(
-      +airport_id,
-      +car_class_id,
-      +range,
-      prebook
-    );
-  }
 
   @Delete(':id')
   @Roles(RolesEnum.ADMIN)

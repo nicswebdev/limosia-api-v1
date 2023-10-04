@@ -48,6 +48,7 @@ export class PriceSchemaService {
     airport_id: number,
     range: number,
     prebook: number,
+    guest_number: number,
   ) {
     let val: any;
     // console.log(prebook);
@@ -68,7 +69,12 @@ export class PriceSchemaService {
         AND (refundable_base_price_1 > 0  OR refundable_base_price_2 > 0 OR non_refundable_base_price_1>0 OR non_refundable_base_price_2>0) 
         AND (? >= prebook_time_hour_1 OR (prebook_time_hour_2 IS NOT NULL AND  ? >= prebook_time_hour_2)) 
     )
-    SELECT *,
+    SELECT RankedPrices.*,
+    car_class.name AS car_class_name,
+    car_class.image AS car_class_image,
+    car_class.description AS car_class_description,
+    airports.name AS airport_name,
+    airports.place_id AS airport_place_id,
     CASE
       WHEN ? >= prebook_time_hour_1 AND (prebook_time_hour_2 IS NULL OR ? < prebook_time_hour_2) AND refundable_base_price_1>0  THEN refundable_base_price_1
       WHEN ? < prebook_time_hour_1 AND (prebook_time_hour_2 IS NOT NULL AND ? >= prebook_time_hour_2) AND refundable_base_price_2>0   THEN refundable_base_price_2
@@ -83,7 +89,8 @@ export class PriceSchemaService {
     END AS relevant_non_refundable_price
     FROM RankedPrices
     INNER JOIN car_class ON car_class_id = car_class.id
-    WHERE rn = 1
+    INNER JOIN airports ON airport_id = airports.id
+    WHERE rn = 1 and max_guest>=?
     ORDER BY car_class_id;    
       `,
       [
@@ -103,6 +110,7 @@ export class PriceSchemaService {
         prebook,
         prebook,
         prebook,
+        guest_number,
       ],
     );
 
@@ -151,9 +159,10 @@ export class PriceSchemaService {
     car_class_id: number,
     range: number,
     prebook: number,
+    guest_number: number,
   ) {
     let val: any;
-    console.log(prebook);
+    // console.log(prebook);
     val = await this.priceSchemaRepository.query(
       `
       WITH RankedPrices AS (
@@ -171,7 +180,13 @@ export class PriceSchemaService {
         AND (refundable_base_price_1 > 0  OR refundable_base_price_2 > 0 OR non_refundable_base_price_1>0 OR non_refundable_base_price_2>0) 
         AND (? >= prebook_time_hour_1 OR (prebook_time_hour_2 IS NOT NULL AND  ? >= prebook_time_hour_2)) 
     )
-    SELECT *,
+    SELECT RankedPrices.*,
+    car_class.name AS car_class_name,
+    car_class.image AS car_class_image,
+    car_class.description AS car_class_description,
+    airports.name AS airport_name,
+    airports.place_id AS airport_place_id,
+
     CASE
     WHEN ? >= prebook_time_hour_1 AND (prebook_time_hour_2 IS NULL OR ? < prebook_time_hour_2) AND refundable_base_price_1>0  THEN refundable_base_price_1
     WHEN ? < prebook_time_hour_1 AND (prebook_time_hour_2 IS NOT NULL AND ? >= prebook_time_hour_2) AND refundable_base_price_2>0   THEN refundable_base_price_2
@@ -186,7 +201,8 @@ export class PriceSchemaService {
   END AS relevant_non_refundable_price
     FROM RankedPrices
     INNER JOIN car_class ON car_class_id = car_class.id
-    WHERE rn = 1
+    INNER JOIN airports ON airport_id = airports.id
+    WHERE rn = 1 AND max_guest>=?
     LIMIT 1
 
       `,
@@ -208,9 +224,10 @@ export class PriceSchemaService {
         prebook,
         prebook,
         prebook,
+        guest_number,
       ],
     );
-    return val[0];
+    return { statusCode: HttpStatus.OK, message: 'Success', items: val[0] };
   }
 
   remove(id: number) {
