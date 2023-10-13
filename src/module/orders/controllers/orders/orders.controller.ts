@@ -23,6 +23,7 @@ import { RolesEnum } from '@/common/enums';
 import { CreateOrderDto, UpdateOrderDto } from '../../dto';
 import { QueryFailedFilter, QueryNotFoundFilter } from '@/common/filters';
 import { AuthUserExpress } from '@/common/types';
+import * as sanitizeHtml from 'sanitize-html';
 
 @ApiTags('Orders')
 @Controller('orders')
@@ -63,11 +64,12 @@ export class OrdersController {
   findAll(
     @Query() paginationQuery: PaginationQuery,
   ): Promise<PaginatedDto<Order>> {
-    const { page, limit, search, sortBy } = paginationQuery;
+    const { page, limit, search, filterPayment, sortBy } = paginationQuery;
     const options: IPaginationOptions & PaginationQuery = {
       page,
       limit,
       search,
+      filterPayment,
       sortBy,
     };
 
@@ -88,6 +90,21 @@ export class OrdersController {
     @AuthUser() user: AuthUserExpress,
     @Body() createOrderDto: CreateOrderDto,
   ) {
+    const sanitizedOrderDto = {};
+    for (const key in createOrderDto) {
+      //Sanitize here
+      if (Object.prototype.hasOwnProperty.call(createOrderDto, key)) {
+        // Sanitize the value using sanitize-html
+        const sanitizedValue = sanitizeHtml(createOrderDto[key], {
+          allowedTags: [],
+          allowedAttributes: {},
+        });
+
+        sanitizedOrderDto[key] = sanitizedValue;
+      }
+    }
+    // console.log(sanitizedOrderDto)
+    // return
     return this.orderService.create(user, createOrderDto);
   }
 

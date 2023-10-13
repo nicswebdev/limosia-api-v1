@@ -47,6 +47,11 @@ export class PaginationQuery {
   @IsString()
   search: string;
 
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  filterPayment?: string;
+
   @ApiPropertyOptional({
     enum: SortsEnum,
     default: SortsEnum.ASC,
