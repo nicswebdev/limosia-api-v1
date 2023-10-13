@@ -4,14 +4,7 @@ import { CreatePriceSchemaDto, UpdatePriceSchemaDto } from '../../dto';
 import { PaginationQuery, PaginatedDto } from '@/common/dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
-import {
-  Repository,
-  Like,
-  LessThan,
-  MoreThan,
-  MoreThanOrEqual,
-  Brackets,
-} from 'typeorm';
+import { Repository, Like } from 'typeorm';
 
 @Injectable()
 export class PriceSchemaService {
@@ -73,6 +66,8 @@ export class PriceSchemaService {
     car_class.name AS car_class_name,
     car_class.image AS car_class_image,
     car_class.description AS car_class_description,
+    car_class.max_guest AS max_guest,
+    car_class.max_suitcase AS max_suitcase,
     airports.name AS airport_name,
     airports.place_id AS airport_place_id,
     CASE
@@ -115,6 +110,26 @@ export class PriceSchemaService {
     );
 
     const items: PriceSchema[] = val;
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Success',
+      items,
+    };
+  }
+
+  async findThreeCheapestSchema() {
+    const res = await this.priceSchemaRepository.query(
+      `SELECT 
+        car_class.name, 
+        MIN(price_schema.non_refundable_base_price_1) AS cheapest_base_price
+       FROM price_schema
+       JOIN car_class ON price_schema.car_class_id = car_class.id
+       GROUP BY car_class.name, car_class.id
+       ORDER BY cheapest_base_price ASC
+       LIMIT 3`,
+    );
+    const items = [...res];
+
     return {
       statusCode: HttpStatus.OK,
       message: 'Success',
@@ -184,6 +199,8 @@ export class PriceSchemaService {
     car_class.name AS car_class_name,
     car_class.image AS car_class_image,
     car_class.description AS car_class_description,
+    car_class.max_guest AS max_guest,
+    car_class.max_suitcase AS max_suitcase,
     airports.name AS airport_name,
     airports.place_id AS airport_place_id,
 
