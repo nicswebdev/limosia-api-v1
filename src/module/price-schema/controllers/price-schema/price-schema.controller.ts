@@ -22,6 +22,7 @@ import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 import { CreatePriceSchemaDto, UpdatePriceSchemaDto } from '../../dto';
 import { PriceSchemaService } from '../../services/price-schema/price-schema.service';
 import { RolesEnum } from '@/common/enums';
+import { type } from 'os';
 
 @ApiTags('Price Schema')
 @Controller('price-schema')
@@ -47,6 +48,63 @@ export class PriceSchemaController {
     };
 
     return this.priceSchemaService.findAllPaginate(options);
+  }
+
+  @Get(
+    '/all_relevant_schemas/airport_id=:airport_id/range=:range/prebook=:prebook/guest=:guest_number',
+  )
+  @UseFilters(QueryFailedFilter)
+  findAllByAirportId(
+    @Param('airport_id') airport_id: number,
+    @Param('range') range: number,
+    @Param('prebook') prebook: number,
+    @Param('guest_number') guest_number: number,
+  ) {
+    return this.priceSchemaService.findAllByAirportIdAndRange(
+      airport_id,
+      range,
+      prebook,
+      guest_number,
+    );
+  }
+
+  @Get('/three-cheapest-schema')
+  @UseFilters(QueryNotFoundFilter, QueryFailedFilter)
+  @ApiCreatedResponse({
+    type: PriceSchema,
+    description: 'Successfully find three cheapest schema',
+  })
+  getThreeCheapestSchema(){
+    return this.priceSchemaService.findThreeCheapestSchema()
+  }
+
+
+
+
+
+  @Get(
+    '/single_relevant_schema/airport_id=:airport_id/car_class_id=:car_class_id/range=:range/prebook=:prebook/guest=:guest_number',
+  )
+  @UseFilters(QueryNotFoundFilter, QueryFailedFilter)
+  @ApiSingleResponse({
+    model: PriceSchema,
+    apiOkDescription: 'Successfully received model list',
+    summary: 'Find single item of existing Price Schemas.',
+  })
+  findOneByAirportCarClassRange(
+    @Param('airport_id') airport_id: number,
+    @Param('car_class_id') car_class_id: number,
+    @Param('range') range: number,
+    @Param('prebook') prebook: number,
+    @Param('guest_number') guest_number: number,
+  ) {
+    return this.priceSchemaService.findOneByAirportCarClassRange(
+      +airport_id,
+      +car_class_id,
+      +range,
+      prebook,
+      guest_number,
+    );
   }
 
   @Post()
@@ -89,17 +147,6 @@ export class PriceSchemaController {
   })
   findOne(@Param('id') id: string) {
     return this.priceSchemaService.findOne(+id);
-  }
-
-  @Get('/by_car_class_and_airport/:car_class_id/:airport_id')
-  @UseFilters(QueryNotFoundFilter, QueryFailedFilter)
-  @ApiSingleResponse({
-    model: PriceSchema,
-    apiOkDescription: 'Successfully received model list',
-    summary: 'Find single item of existing Price Schemas.',
-  })
-  findOneByCarClassIdAndAirportId(@Param('car_class_id') car_id: string, @Param('airport_id') airport_id:string) {
-    return this.priceSchemaService.findOneByCarClassIdAndAirportId(+car_id, +airport_id);
   }
 
   @Delete(':id')

@@ -24,7 +24,13 @@ export class GoogleAuthService {
     });
 
     if (queryUser) {
-      return this.authService.generateToken(queryUser);
+      const token = await this.authService.generateToken(queryUser);
+      const { id, f_name, l_name, email } = queryUser;
+
+      return {
+        user: { id, f_name, l_name, email },
+        access_token: token.access_token,
+      };
     }
 
     this.logger.warn('First time user! Creating new user...');
@@ -32,7 +38,11 @@ export class GoogleAuthService {
     const newUser = await this.usersRepository.findOneBy({
       email: user.email,
     });
-
-    return await this.authService.generateToken(newUser);
+    const { f_name, l_name, email } =newUser;
+    const token = await this.authService.generateToken(newUser);
+    return {
+      user: { f_name, l_name, email },
+      access_token: token.access_token,
+    };
   }
 }
