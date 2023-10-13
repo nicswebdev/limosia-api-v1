@@ -13,6 +13,8 @@ import { Users } from './users.entity';
 import { PaymentStatus } from './payment-status.entity';
 import { OrderStatus } from './order-status.entity';
 import { Exclude } from 'class-transformer';
+import { PriceSchema } from './price-schema.entity';
+import { CarClass } from './car-class.entity';
 
 @Entity('orders')
 export class Order {
@@ -159,4 +161,13 @@ export class Order {
   @Column({ default: false })
   @IsBoolean()
   delete_row: boolean;
+
+  @Column()
+  @Exclude()
+  car_class_id: number;
+
+  @ApiProperty({ type: () => CarClass })
+  @ManyToOne(() => CarClass, (carclass) => carclass.id)
+  @JoinColumn({ name: 'car_class_id' })
+  car_class: CarClass;
 }

@@ -3,9 +3,10 @@ import { Order } from '@/db/models';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
-import { Repository, Like } from 'typeorm';
+import { Repository, Like, Equal } from 'typeorm';
 import { CreateOrderDto, UpdateOrderDto } from '../../dto';
 import { AuthUserExpress } from '@/common/types';
+import { equal } from 'assert';
 
 @Injectable()
 export class OrdersService {
@@ -31,7 +32,7 @@ export class OrdersService {
         order: {
           id: options.sortBy,
         },
-        relations: ['order_status', 'payment_status'],
+        relations: ['order_status', 'payment_status', 'car_class'],
       },
     );
 
@@ -46,15 +47,19 @@ export class OrdersService {
   async findAllPaginate(
     options: IPaginationOptions & PaginationQuery,
   ): Promise<PaginatedDto<Order>> {
+
     const val = await paginate<Order>(
       this.orderRepository,
       { ...options },
       {
         where: {
           order_no: options.search && Like(`%${options.search}%`),
+          payment_status:
+            options.filterPayment &&
+            Equal(Number(options.filterPayment)),
         },
         order: {
-          id: options.sortBy,
+          pickup_date: options.sortBy,
         },
         relations: ['order_status', 'payment_status'],
       },

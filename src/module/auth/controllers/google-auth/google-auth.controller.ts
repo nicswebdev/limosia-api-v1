@@ -19,15 +19,11 @@ export class GoogleAuthController {
 
   @Post('google-login')
   async googleLogin(@Body() body) {
-    const { idToken } = body; // Assuming you pass the Google access token in the request body
-    // Validate the Google access token using the GoogleStrategy
+    const { idToken } = body; 
     try {
       const user = await this.googleStrategy.validate(idToken);
-      // The token is valid, and user contains the user's information.
-      // Your logic to handle the user data goes here.
       return user;
     } catch (error) {
-      // Token verification failed, throw an UnauthorizedException.
       throw new UnauthorizedException('Invalid Google access token');
     }
   }

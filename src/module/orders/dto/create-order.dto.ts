@@ -6,6 +6,7 @@ import {
   IsInt,
   IsMilitaryTime,
   IsNotEmpty,
+  IsNumber,
   IsString,
 } from 'class-validator';
 
@@ -101,6 +102,11 @@ export class CreateOrderDto {
   @IsNotEmpty()
   @IsString()
   airport_name: string;
+
+  @ApiPropertyOptional()
+  @IsNotEmpty()
+  @IsNumber()
+  car_class_id: number;
 
   @ApiPropertyOptional({ type: 'integer' })
   @Transform(({ value }) => parseInt(value))
